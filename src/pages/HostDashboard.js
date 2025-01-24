@@ -23,7 +23,7 @@ const HostDashboard = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mt-11">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">
           Welcome, {user?.username || 'Host'}
@@ -55,7 +55,7 @@ const HostDashboard = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-600">
+        <div className="text-center text-gray-600 mt-10">
           No recipes found matching your search.
         </div>
       )}

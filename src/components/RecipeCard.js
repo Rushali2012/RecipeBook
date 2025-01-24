@@ -19,7 +19,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
           alt={recipe.strMeal} 
           className="w-full h-48 object-cover"
         />
-        <div className="p-4">
+        <div className="p-4 ">
           <h2 className="text-xl font-bold mb-2">{recipe.strMeal}</h2>
           <p className="text-gray-600 mb-4">{recipe.strCategory}</p>
         </div>

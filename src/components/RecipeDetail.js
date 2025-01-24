@@ -11,48 +11,56 @@ const RecipeDetail = () => {
 
   const recipe = recipes.find(r => r.idMeal === id);
 
-  if (!recipe) return <div className="text-center mt-10">Recipe Not Found</div>;
+  if (!recipe) {
+    return <div>Loading...</div>;
+  }
+
+  const instructions = recipe.strInstructions ? recipe.strInstructions.split('\n') : [];
+  const ingredients = [];
+  
+  for (let i = 1; i <= 20; i++) {
+    const ingredient = recipe[`strIngredient${i}`];
+    if (ingredient) {
+      ingredients.push(ingredient);
+    }
+  }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mt-10">
       <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <img 
-          src={recipe.strMealThumb} 
-          alt={recipe.strMeal} 
+        <img
+          src={recipe.strMealThumb}
+          alt={recipe.strMeal}
           className="w-full h-96 object-cover"
         />
         <div className="p-6">
           <h1 className="text-3xl font-bold mb-4">{recipe.strMeal}</h1>
           <p className="text-gray-600 mb-4">{recipe.strCategory}</p>
-          
+
           <h2 className="text-2xl font-semibold mb-2">Ingredients</h2>
           <ul
             className="max-h-40 overflow-y-auto border border-gray-200 p-4 rounded"
             style={{ scrollbarWidth: 'thin' }}
           >
-            {Array.from({ length: 20 }, (_, index) => {
-              const ingredient = recipe[`strIngredient${index + 1}`];
-              if (ingredient) {
-                return <li key={index}>{ingredient}</li>;
-              }
-              return null;
-            })}
+            {ingredients.map((ingredient, index) => (
+              <li key={index}>{ingredient}</li>
+            ))}
           </ul>
           <br />
-          
+
           <h2 className="text-2xl font-semibold mb-2">Steps</h2>
           <ol
             className="list-decimal ml-5 max-h-40 overflow-y-auto border border-gray-200 p-4 rounded"
             style={{ scrollbarWidth: 'thin' }}
           >
-            {recipe.strInstructions?.split('\n').map((step, i) => 
-              step.trim() && <li key={i}>{step.trim()}</li>
+            {instructions.map((step, i) =>
+              step.trim() ? <li key={i}>{step.trim()}</li> : null
             )}
           </ol>
 
           {userType === 'host' && (
             <div className="mt-6 flex space-x-4">
-              <button 
+              <button
                 onClick={() => navigate(`/recipe/edit/${id}`)}
                 className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
               >

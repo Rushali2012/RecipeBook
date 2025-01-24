@@ -1,9 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useRecipes } from '../context/RecipeContext';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, FieldArray, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+const validationSchema = Yup.object({
+  strMeal: Yup.string().required('Recipe Name is required'),
+  strCategory: Yup.string().required('Category is required'),
+  strMealThumb: Yup.string().url('Invalid image URL').required('Image URL is required'),
+  ingredients: Yup.array().of(Yup.string().required('Ingredient is required')).min(1, 'At least one ingredient is required'),
+  steps: Yup.array().of(Yup.string().required('Step is required')).min(1, 'At least one step is required')
+});
 
 const RecipeForm = () => {
   const { id } = useParams();
@@ -11,33 +20,41 @@ const RecipeForm = () => {
   const { recipes, addRecipe, updateRecipe } = useRecipes();
   const { userType } = useAuth();
 
-  const initialValues = {
+  const [formData, setFormData] = useState({
     idMeal: id || Date.now().toString(),
     strMeal: '',
     strCategory: '',
     strMealThumb: '',
     strInstructions: '',
-    strIngredient: ''
-  };
+    ingredients: [''],
+    steps: ['']
+  });
 
   useEffect(() => {
     if (id) {
       const existingRecipe = recipes.find(r => r.idMeal === id);
       if (existingRecipe) {
-        initialValues.strMeal = existingRecipe.strMeal;
-        initialValues.strCategory = existingRecipe.strCategory;
-        initialValues.strMealThumb = existingRecipe.strMealThumb;
-        initialValues.strInstructions = existingRecipe.strInstructions;
-        initialValues.strIngredient = existingRecipe.strIngredient;
+        setFormData({
+          idMeal: existingRecipe.idMeal,
+          strMeal: existingRecipe.strMeal,
+          strCategory: existingRecipe.strCategory,
+          strMealThumb: existingRecipe.strMealThumb,
+          strInstructions: existingRecipe.strInstructions || '',
+          ingredients: existingRecipe.strIngredient ? existingRecipe.strIngredient.split('\n') : [''],
+          steps: existingRecipe.strInstructions ? existingRecipe.strInstructions.split('\n') : ['']
+        });
       }
     }
   }, [id, recipes]);
 
   const handleSubmit = (values) => {
+    values.strIngredient = values.ingredients.join('\n');
+    values.strInstructions = values.steps.join('\n');
+
     if (id) {
-      updateRecipe(values);
+      updateRecipe(values); 
     } else {
-      addRecipe(values);
+      addRecipe(values); 
     }
     navigate('/host/dashboard');
   };
@@ -47,28 +64,35 @@ const RecipeForm = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 mt-12">
       <Formik
-        initialValues={initialValues}
+        enableReinitialize={true}
+        initialValues={formData}
+        validationSchema={validationSchema} 
         onSubmit={handleSubmit}
       >
-        {() => (
+        {({ values, errors, touched }) => (
           <Form className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
             <h2 className="text-2xl font-bold mb-6 text-center">
               {id ? 'Edit Recipe' : 'Add New Recipe'}
             </h2>
+            
             <div className="mb-4">
               <label className="block mb-2">Recipe Name</label>
               <Field
                 type="text"
                 name="strMeal"
+                placeholder="Name of the Recipe"
                 className="w-full px-3 py-2 border rounded"
                 required
               />
+              <ErrorMessage name="strMeal" component="div" className="text-red-500 text-sm" />
             </div>
+
             <div className="mb-4">
               <label className="block mb-2">Category</label>
               <Field as="select" name="strCategory" className="w-full border-2 border-b-2">
+                <option value="" selected>Select a Category</option>
                 <option value="Seafood">Seafood</option>
                 <option value="Side">Side</option>
                 <option value="Vegetarian">Vegetarian</option>
@@ -80,45 +104,101 @@ const RecipeForm = () => {
                 <option value="Lamb">Lamb</option>
                 <option value="Chicken">Chicken</option>
               </Field>
+              <ErrorMessage name="strCategory" component="div" className="text-red-500 text-sm" />
             </div>
+
             <div className="mb-4">
               <label className="block mb-2">Image URL</label>
               <Field
                 type="text"
                 name="strMealThumb"
+                placeholder="Image link..."
                 className="w-full px-3 py-2 border rounded"
                 required
               />
+              <ErrorMessage name="strMealThumb" component="div" className="text-red-500 text-sm" />
             </div>
+
             <div className="mb-4">
               <label className="block mb-2">Ingredients</label>
-              <Field
-                as="textarea"
-                name="strIngredient"
-                className="w-full px-3 py-2 border rounded"
-                rows="4"
-                required
-              />
+              <FieldArray name="ingredients">
+                {({ push, remove }) => (
+                  <div>
+                    {values.ingredients.map((ingredient, index) => (
+                      <div key={index} className="flex items-center gap-2 mb-2">
+                        <Field
+                          name={`ingredients[${index}]`}
+                          placeholder="Ingredients..."
+                          className="w-full px-3 py-2 border rounded"
+                        />
+                        
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className="text-red-500"
+                        >
+                          Remove
+                        </button>
+                        <ErrorMessage name={`ingredients[${index}]`} component="div" className="text-red-500 text-sm" />
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => push('')}
+                      className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30 "
+                    >
+                      Add Ingredient
+                    </button>
+                  </div>
+                )}
+              </FieldArray>
             </div>
+
             <div className="mb-4">
               <label className="block mb-2">Steps</label>
-              <Field
-                as="textarea"
-                name="strInstructions"
-                className="w-full px-3 py-2 border rounded"
-                rows="4"
-                required
-              />
+              <FieldArray name="steps">
+                {({ push, remove }) => (
+                  <div>
+                    {values.steps.map((step, index) => (
+                      <div key={index} className="flex items-center gap-2 mb-2">
+                        <Field
+                          name={`steps[${index}]`}
+                          placeholder="Steps..."
+                          className="w-full px-3 py-2 border rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => remove(index)}
+                          className="text-red-500"
+                        >
+                          Remove
+                        </button>
+                        <ErrorMessage name={`steps[${index}]`} component="div" className="text-red-500 text-sm" />
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => push('')}
+                      className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+                    >
+                      Add Step
+                    </button>
+                  </div>
+                )}
+              </FieldArray>
             </div>
-            <button 
-              type="submit" 
-              className="w-[50%] bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-            >
-              {id ? 'Update Recipe' : 'Add Recipe'}
-            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <Link to={'/host/dashboard'}>
-              <button type="button" className="w-[35%] bg-gray-500 text-white py-2 rounded hover:bg-gray-600"> Cancel</button>
-            </Link>
+
+            <div className="flex gap-x-2 justify-evenly"> 
+              <button 
+                type="submit" 
+                className="w-[50%] bg-blue-500 text-white py-2 rounded hover:bg-blue-600 "
+              >
+                {id ? 'Update Recipe' : 'Add Recipe'}
+              </button>
+              <Link to={'/host/dashboard'}>
+                <button type="button" className="w-[150px] bg-gray-500 text-white py-2 rounded hover:bg-gray-600 "> Cancel</button>
+              </Link>
+            </div>
           </Form>
         )}
       </Formik>
