@@ -5,11 +5,13 @@ import { useAuth } from '../context/AuthContext';
 const Navbar = () => {
   const { user, userType, logout } = useAuth();
 
-  return (<>
+  return (
+  <>
     
-    <nav className=" z-10 fixed top-0 w-full  bg-[#72A0C1] p-3 text-black ">
-    <Link to="/"><img class="top-0 ml-28 mt-1 fixed w-15 h-12 justify-center" src="https://imgs.search.brave.com/pwmbqKzHMYjAVar4tLdlrOS9eu81_au56XyVjd8W5lk/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEwLzU1LzczLzE5/LzM2MF9GXzEwNTU3/MzE5NDhfcWRrbzNX/NVJkVEs2NHhuRUU2/Mm9mWlk0UXU4OFZF/M0YuanBn"></img></Link>
-      <div className="container mx-auto flex justify-between items-center">
+    <nav className=" z-10 fixed top-0 w-full  bg-[#72A0C1] p-4 text-black ">
+      
+    <Link to="/"><img class="top-0 ml-28 mt-2 fixed w-15 h-12 justify-center" src="https://imgs.search.brave.com/pwmbqKzHMYjAVar4tLdlrOS9eu81_au56XyVjd8W5lk/rs:fit:500:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzEwLzU1LzczLzE5/LzM2MF9GXzEwNTU3/MzE5NDhfcWRrbzNX/NVJkVEs2NHhuRUU2/Mm9mWlk0UXU4OFZF/M0YuanBn"></img></Link>
+    <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-2xl font-bold">Recipe Book</Link>
         <div className="flex items-center space-x-5">
           {!user ? (
@@ -32,6 +34,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      
     </nav>
     </>
   );

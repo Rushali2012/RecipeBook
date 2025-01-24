@@ -18,7 +18,7 @@ const GuestRecipePage = () => {
   if (loading) return <div className="text-center mt-10">Loading...</div>;
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-9">
+    <div className="container mx-auto px-4 py-8 mt-11">
       <input
         type="text"
         value={searchQuery}
