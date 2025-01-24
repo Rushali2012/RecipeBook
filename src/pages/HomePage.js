@@ -12,16 +12,16 @@ const HomePage = () => {
         <div className="space-x-4">
           <Link 
             to="/guest/recipes" 
-            className="bg-[#72A0C1]  text-white px-6 py-3 rounded-lg hover:bg-blue-800 transition"
+            className="bg-[#46708d]  text-white px-6 py-3 rounded-lg hover:bg-[#203e53] transition"
           >
             Browse Recipes
           </Link>
-          <Link 
+          {/* <Link 
             to="/login" 
             className="bg-[#444C38] text-white px-6 py-3 rounded-lg hover:bg-green-800 transition"
           >
             Host Login
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

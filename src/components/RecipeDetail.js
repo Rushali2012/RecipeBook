@@ -1,5 +1,6 @@
+
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate,Link,useLocation  } from 'react-router-dom';
 import { useRecipes } from '../context/RecipeContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -8,7 +9,7 @@ const RecipeDetail = () => {
   const navigate = useNavigate();
   const { recipes } = useRecipes();
   const { userType } = useAuth();
-
+  const location = useLocation();
   const recipe = recipes.find(r => r.idMeal === id);
 
   if (!recipe) {
@@ -24,9 +25,21 @@ const RecipeDetail = () => {
       ingredients.push(ingredient);
     }
   }
-
+  const handleBackClick = () => {
+    if (location.pathname.includes('host')) {
+      navigate('/host/dashboard');
+    } else {
+      navigate('/guest/recipes');
+    }
+  };
   return (
-    <div className="container mx-auto px-4 py-8 mt-10">
+    <div className="container mx-auto px-4 py-8 mt-12">
+      <div>
+        <button onClick={handleBackClick} className="text-2xl font-semibold">
+          Back
+        </button>
+      </div>
+
       <div className="max-w-2xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
         <img
           src={recipe.strMealThumb}

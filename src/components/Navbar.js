@@ -16,8 +16,8 @@ const Navbar = () => {
         <div className="flex items-center space-x-5">
           {!user ? (
             <>
-              <Link to="/login" className="hover:text-gray-200">Login</Link>
-              <Link to="/register" className="hover:text-gray-200">Register</Link>
+              <Link to="/login" ><button className="bg-[#203e53] text-center text-white rounded w-[5cm] h-10 hover:bg-[#29343d] hover:text-gray-200">Switch to Host User</button></Link>
+              {/* <Link to="/register" className="hover:text-gray-200">Register</Link> */}
             </>
           ) : (
             <>

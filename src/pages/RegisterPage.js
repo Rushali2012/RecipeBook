@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,Link} from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -54,6 +55,8 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
+      <div><Link to={'/login'}><button class="text-md">Back</button></Link></div>
+
         <h2 className="text-2xl font-bold mb-6 text-center">Host Registration</h2>
 
         {message.text && (

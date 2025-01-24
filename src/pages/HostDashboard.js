@@ -24,7 +24,9 @@ const HostDashboard = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 mt-11">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex justify-between items-center mb-8 mt-5">
+              <div><Link to={'/login'}><button class="text-xl font-semibold">Back</button></Link></div>
+        
         <h1 className="text-3xl font-bold">
           Welcome, {user?.username || 'Host'}
         </h1>
@@ -55,7 +57,7 @@ const HostDashboard = () => {
           ))}
         </div>
       ) : (
-        <div className="text-center text-gray-600 mt-10">
+        <div className="text-center text-black-600 mt-[4rem]">
           No recipes found matching your search.
         </div>
       )}

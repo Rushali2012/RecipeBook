@@ -60,11 +60,12 @@ const RecipeForm = () => {
   };
 
   if (userType !== 'host') {
-    return <div className="text-center mt-10">Access Denied</div>;
+    return <div className="text-center mt-[4rem]">Access Denied</div>;
   }
 
   return (
     <div className="container mx-auto px-4 py-8 mt-12">
+      
       <Formik
         enableReinitialize={true}
         initialValues={formData}
