@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
+// import { AuthProvider } from './context/AuthContext';
 import { RecipeProvider } from './context/RecipeContext';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
@@ -10,11 +10,13 @@ import HostDashboard from './pages/HostDashboard';
 import GuestRecipePage from './pages/GuestRecipePage';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeForm from './components/RecipeForm';
+import { useAuth } from './context/AuthContext'; // Correct path for useAuth
+
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
+      <useAuth>
         <RecipeProvider>
           <div className="min-h-screen bg-gray-100">
             <Navbar />
@@ -30,7 +32,7 @@ function App() {
             </Routes>
           </div>
         </RecipeProvider>
-      </AuthProvider>
+      </useAuth>
     </Router>
   );
 }

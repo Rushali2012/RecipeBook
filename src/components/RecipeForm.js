@@ -34,18 +34,27 @@ const RecipeForm = () => {
     if (id) {
       const existingRecipe = recipes.find(r => r.idMeal === id);
       if (existingRecipe) {
+        const ingredients = [];
+        for (let i = 1; i <= 20; i++) {
+          const ingredient = existingRecipe[`strIngredient${i}`];
+          if (ingredient) {
+            ingredients.push(ingredient.trim());
+          }
+        }
+  
         setFormData({
           idMeal: existingRecipe.idMeal,
           strMeal: existingRecipe.strMeal,
           strCategory: existingRecipe.strCategory,
           strMealThumb: existingRecipe.strMealThumb,
           strInstructions: existingRecipe.strInstructions || '',
-          ingredients: existingRecipe.strIngredient ? existingRecipe.strIngredient.split('\n').map(ingredient => ingredient.trim()) : [''],
+          ingredients: ingredients.length ? ingredients : [''], 
           steps: existingRecipe.strInstructions ? existingRecipe.strInstructions.split('\n').map(step => step.trim()) : ['']
         });
       }
     }
   }, [id, recipes]);
+  
 
   const handleSubmit = (values) => {
     values.strIngredient = values.ingredients.join('\n');

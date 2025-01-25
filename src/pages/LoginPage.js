@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
@@ -29,8 +29,6 @@ const LoginPage = () => {
   const onSubmit = (values) => {
     const storedUser = JSON.parse(localStorage.getItem('user'));
 
-    console.log('Stored user:', storedUser);  
-
     if (
       storedUser &&
       storedUser.email === values.email &&
@@ -44,13 +42,11 @@ const LoginPage = () => {
     }
   };
 
-  return (<>
-    
-    
+  return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-    
       <div className="bg-white p-9 rounded-xl shadow-md w-96">
-      <div><Link to={'/'}><button class="text-md">Back</button></Link></div><h2 className="text-2xl font-bold mb-6 text-center">Host Login</h2>
+        <div><Link to={'/'}><button className="text-md">&lt; Back</button></Link></div>
+        <h2 className="text-2xl font-bold mb-6 text-center">Host Login</h2>
 
         {message.text && (
           <div
@@ -109,7 +105,6 @@ const LoginPage = () => {
         </p>
       </div>
     </div>
-    </>
   );
 };
 

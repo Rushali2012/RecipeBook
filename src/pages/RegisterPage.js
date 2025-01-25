@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate ,Link} from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -10,9 +9,6 @@ const RegisterPage = () => {
   const navigate = useNavigate();
   const [message, setMessage] = useState({ text: '', type: '' });
   const emailRegex = /^[A-Z0-9._%+-]+@[A-Z.-]+\.[A-Z]{2,}$/i;
-  const passRegex = /^[A-Z](?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{7}$/;
-
-
 
   const validationSchema = Yup.object({
     username: Yup.string()
@@ -23,12 +19,11 @@ const RegisterPage = () => {
       .email('Invalid email address')
       .required('Email is required'),
     password: Yup.string()
-    .matches(/^[A-Z]/, 'Password must start with an uppercase letter')  
-    .matches(/(?=.*\d)/, 'Password must contain at least one number')   
-    .matches(/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/, 'Password must contain at least one special character') 
-    .min(8, 'Password must be exactly 8 characters long')              
-    .max(8, 'Password must be exactly 8 characters long')             
-    .required('Password is required'),
+      .matches(/^[A-Z]/, 'Password must start with an uppercase letter')  
+      .matches(/(?=.*\d)/, 'Password must contain at least one number')   
+      .matches(/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/, 'Password must contain at least one special character') 
+      .min(8, 'Password must be 8 or greater than 8 characters long')              
+      .required('Password is required'),
   });
 
   const initialValues = {
@@ -55,7 +50,7 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
-      <div><Link to={'/login'}><button class="text-md">Back</button></Link></div>
+        <div><Link to={'/login'}><button class="text-md">&lt; Back</button></Link></div>
 
         <h2 className="text-2xl font-bold mb-6 text-center">Host Registration</h2>
 
