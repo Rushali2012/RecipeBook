@@ -10,8 +10,7 @@ import HostDashboard from './pages/HostDashboard';
 import GuestRecipePage from './pages/GuestRecipePage';
 import RecipeDetail from './components/RecipeDetail';
 import RecipeForm from './components/RecipeForm';
-import { useAuth } from './context/AuthContext'; // Correct path for useAuth
-
+// import { useAuth } from './context/AuthContext'; 
 
 function App() {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useNavigate,Link,useLocation  } from 'react-router-dom';
+import { useParams, useNavigate,useLocation  } from 'react-router-dom';
 import { useRecipes } from '../context/RecipeContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -42,7 +42,7 @@ const RecipeDetail = () => {
              <div className="mt-6 flex space-x-4">
               <button
                 onClick={() => navigate(`/recipe/edit/${id}`)}
-                className=" ml-5 mb-5 bg-blue-500 text-white h-8 w-[3cm] rounded hover:bg-blue-600"
+                className=" ml-5 mb-5 bg-blue-800 text-white h-9 w-[4cm] rounded hover:bg-blue-600"
               >
                 Edit Recipe
               </button>
@@ -64,7 +64,7 @@ const RecipeDetail = () => {
         {/* </div> */}
         {/* <div> */}
         {/* <div className="w-[10cm] max-h-[13cm] mx-auto bg-white shadow-lg rounded-lg overflow-hidden mt-[1cm]"> */}
-        <hr />
+        <hr className='w-full h-0.5 bg-[#636060]'/>
         <h2 className="text-2xl font-semibold mb-2 ml-2 mt-2">Ingredients</h2>
           <ul
             className="max-h-[8cm] overflow-y-auto border border-gray-200 p-4 rounded ml-2 mt-2 mr-2"
@@ -78,7 +78,7 @@ const RecipeDetail = () => {
         </div>
         </div> 
         {/* </div> */}
-        <div className="w-[36cm] h-[15cm] ml-[2cm] mx-auto  bg-white shadow-lg rounded-lg overflow-hidden mt-[1cm]">
+        <div className="w-[33.5cm] h-[15cm] ml-[3.2cm] mx-auto  bg-white shadow-xl rounded-lg overflow-hidden mt-[1cm]">
         <h2 className="text-2xl font-semibold mb-2 ml-2 mt-2 ">Steps</h2>
           <ol
             className="list-disc ml-5 h-[12cm] overflow-y-auto border border-gray-200 p-4 rounded ml-2 mt-2 mr-2"

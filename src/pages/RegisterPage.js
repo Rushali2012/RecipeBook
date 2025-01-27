@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate ,Link} from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 import * as Yup from 'yup';
 
 const RegisterPage = () => {
@@ -21,7 +24,7 @@ const RegisterPage = () => {
     password: Yup.string()
       .matches(/^[A-Z]/, 'Password must start with an uppercase letter')  
       .matches(/(?=.*\d)/, 'Password must contain at least one number')   
-      .matches(/(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/, 'Password must contain at least one special character') 
+      .matches(/(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/, 'Password must contain at least one special character') 
       .min(8, 'Password must be 8 or greater than 8 characters long')              
       .required('Password is required'),
   });
@@ -50,7 +53,7 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
-        <div><Link to={'/login'}><button class="text-md">&lt; Back</button></Link></div>
+        <div><Link to={'/'}><button class="text-md">&lt; Back</button></Link></div>
 
         <h2 className="text-2xl font-bold mb-6 text-center">Host Registration</h2>
 
@@ -71,7 +74,7 @@ const RegisterPage = () => {
         >
           <Form>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Username</label>
+              <label className="block text-gray-700 mb-2"><FontAwesomeIcon icon={faUser} /> Username</label>
               <Field
                 type="text"
                 name="username"
@@ -83,7 +86,7 @@ const RegisterPage = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Email</label>
+              <label className="block text-gray-700 mb-2"><FontAwesomeIcon icon={faEnvelope}/> Email</label>
               <Field
                 type="email"
                 name="email"
@@ -95,7 +98,7 @@ const RegisterPage = () => {
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 mb-2">Password</label>
+              <label className="block text-gray-700 mb-2"><FontAwesomeIcon icon={faLock}/> Password</label>
               <Field
                 type="password"
                 name="password"

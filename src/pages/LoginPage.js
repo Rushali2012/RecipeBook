@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+
 import * as Yup from 'yup';
 
 const LoginPage = () => {
@@ -65,19 +69,20 @@ const LoginPage = () => {
         >
           <Form>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Email</label>
+              <label className="block text-gray-700 mb-2"> <FontAwesomeIcon icon={faEnvelope} /> Email</label>
               <Field
                 type="email"
                 name="email"
                 className="w-full px-3 py-2 border rounded-lg"
               />
               <ErrorMessage name="email">
+               
                 {(msg) => <p className="text-red-500 text-sm mt-1">{msg}</p>}
               </ErrorMessage>
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 mb-2">Password</label>
+              <label className="block text-gray-700 mb-2"><FontAwesomeIcon icon={faLock} /> Password</label>
               <Field
                 type="password"
                 name="password"
