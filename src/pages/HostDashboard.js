@@ -25,7 +25,7 @@ const HostDashboard = () => {
   return (
     <div className="container mx-auto px-4 py-8 mt-11">
       <div className="flex justify-between items-center mb-8 mt-5">
-              <div><Link to={'/login'}><button class="text-xl font-semibold">&lt;&lt; Back</button></Link></div>
+              <div><Link to={'/login'}><button class="text-xl font-semibold text-gray-700">&lt;&lt; Back</button></Link></div>
         
         <h1 className="text-3xl font-bold">
           Welcome, {user?.username || 'Host'}

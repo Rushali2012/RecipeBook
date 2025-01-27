@@ -49,7 +49,7 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-9 rounded-xl shadow-md w-96">
-        <div><Link to={'/'}><button className="text-md">&lt; Back</button></Link></div>
+        <div><Link to={'/'}><button className="text-md text-gray-700">&lt; Back</button></Link></div>
         <h2 className="text-2xl font-bold mb-6 text-center">Host Login</h2>
 
         {message.text && (
@@ -76,13 +76,12 @@ const LoginPage = () => {
                 className="w-full px-3 py-2 border rounded-lg"
               />
               <ErrorMessage name="email">
-               
                 {(msg) => <p className="text-red-500 text-sm mt-1">{msg}</p>}
               </ErrorMessage>
             </div>
 
             <div className="mb-6">
-              <label className="block text-gray-700 mb-2"><FontAwesomeIcon icon={faLock} /> Password</label>
+              <label className="block text-gray-700 mb-2"><FontAwesomeIcon icon={faLock} />Password</label>
               <Field
                 type="password"
                 name="password"

@@ -53,7 +53,7 @@ const RegisterPage = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
-        <div><Link to={'/'}><button class="text-md">&lt; Back</button></Link></div>
+        <div><Link to={'/'}><button class="text-md text-gray-700">&lt; Back</button></Link></div>
 
         <h2 className="text-2xl font-bold mb-6 text-center">Host Registration</h2>
 
