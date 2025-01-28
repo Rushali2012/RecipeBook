@@ -10,6 +10,7 @@ const RecipeDetail = () => {
   const { userType } = useAuth();
   const location = useLocation();
   const recipe = recipes.find((r) => r.idMeal === id);
+  const { source } = location.state || { source: 'default' };
 
   if (!recipe) {
     return <div>Loading...</div>;
@@ -26,7 +27,7 @@ const RecipeDetail = () => {
   }
 
   const handleBackClick = () => {
-    if (location.pathname.includes('host')) {
+    if (source === 'host') {
       navigate('/host/dashboard');
     } else {
       navigate('/guest/recipes');

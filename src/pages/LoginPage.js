@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -29,14 +30,15 @@ const LoginPage = () => {
   };
 
   const onSubmit = (values) => {
-    const storedUser = JSON.parse(localStorage.getItem('user'));
+    const users = JSON.parse(localStorage.getItem('users')) || [];
 
-    if (
-      storedUser &&
-      storedUser.email === values.email &&
-      storedUser.password === values.password
-    ) {
-      const userData = { email: values.email, id: storedUser.id };
+    const user = users.find(
+      (user) =>
+        user.email === values.email && user.password === values.password
+    );
+
+    if (user) {
+      const userData = { email: user.email, id: user.id };
       login(userData, 'host');
       navigate('/host/dashboard');
     } else {
@@ -110,7 +112,7 @@ const LoginPage = () => {
         </Formik>
 
         <p className="text-center mt-4">
-          Don't have an account?{' '}
+          New user?{' '}
           <span
             onClick={() => navigate('/register')}
             className="text-blue-500 cursor-pointer ml-1"

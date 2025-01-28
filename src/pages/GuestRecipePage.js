@@ -9,8 +9,8 @@ const GuestRecipePage = () => {
 
   useEffect(() => {
     const filtered = recipes.filter(recipe => 
-      recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      recipe.strCategory.toLowerCase().includes(searchQuery.toLowerCase())
+      recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase())
+      // recipe.strCategory.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredRecipes(filtered);
   }, [searchQuery, recipes]);
@@ -31,7 +31,7 @@ const GuestRecipePage = () => {
       {filteredRecipes.length > 0 ? (
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
           {filteredRecipes.map(recipe => (
-            <RecipeCard key={recipe.idMeal} recipe={recipe} />
+            <RecipeCard key={recipe.idMeal} recipe={recipe} source="guest" />
           ))}
         </div>
       ) : (

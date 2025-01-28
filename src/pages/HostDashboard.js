@@ -12,8 +12,8 @@ const HostDashboard = () => {
 
   useEffect(() => {
     const filtered = recipes.filter(recipe => 
-      recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      recipe.strCategory.toLowerCase().includes(searchQuery.toLowerCase())
+      recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase()) 
+      // recipe.strCategory.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredRecipes(filtered);
   }, [searchQuery, recipes]);
@@ -59,6 +59,7 @@ const HostDashboard = () => {
             <RecipeCard 
               key={recipe.idMeal} 
               recipe={recipe} 
+              source="host"
               onDelete={() => handleDelete(recipe.idMeal)}
             />
           ))}

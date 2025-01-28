@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -22,10 +23,10 @@ const RegisterPage = () => {
       .email('Invalid email address')
       .required('Email is required'),
     password: Yup.string()
-      .matches(/^[A-Z]/, 'Password must start with an uppercase letter')  
-      .matches(/(?=.*\d)/, 'Password must contain at least one number')   
-      .matches(/(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/, 'Password must contain at least one special character') 
-      .min(8, 'Password must be 8 or greater than 8 characters long')              
+      .matches(/^[A-Z]/, 'Password must start with an uppercase letter')
+      .matches(/(?=.*\d)/, 'Password must contain at least one number')
+      .matches(/(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])/, 'Password must contain at least one special character')
+      .min(8, 'Password must be 8 or greater than 8 characters long')
       .required('Password is required'),
   });
 
@@ -39,13 +40,22 @@ const RegisterPage = () => {
     const userData = {
       username: values.username,
       email: values.email,
-      id: Date.now(),  
+      id: Date.now(),
       password: values.password,
     };
 
-    localStorage.setItem('user', JSON.stringify(userData));
+    const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
+    const emailExists = existingUsers.some(user => user.email === values.email);
 
-    login(userData, 'host');  
+    if (emailExists) {
+      setMessage({ text: 'Email already exists. Please use another email.', type: 'error' });
+      return;
+    }
+
+    existingUsers.push(userData);
+    localStorage.setItem('users', JSON.stringify(existingUsers));
+
+    login(userData, 'host'); 
     setMessage({ text: 'Registration successful!', type: 'success' });
     setTimeout(() => navigate('/login'), 1500);
   };
