@@ -57,7 +57,7 @@ const Navbar = () => {
               Switch to Host user
             </span>
           </label>
-
+{isHost?
           <div className="relative user-dropdown">
           <FontAwesomeIcon
               icon={faUser}
@@ -94,7 +94,7 @@ const Navbar = () => {
                 ) : null}
               </div>
             )}
-          </div>
+          </div>:""}
         </div>
       </div>
     </nav>

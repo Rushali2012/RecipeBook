@@ -46,7 +46,7 @@ const RegisterPage = () => {
 
     const existingUsers = JSON.parse(localStorage.getItem('users')) || [];
     const emailExists = existingUsers.some(user => user.email === values.email);
-
+console.log("existingUsers",existingUsers);
     if (emailExists) {
       setMessage({ text: 'Email already exists. Please use another email.', type: 'error' });
       return;
@@ -57,7 +57,7 @@ const RegisterPage = () => {
 
     login(userData, 'host'); 
     setMessage({ text: 'Registration successful!', type: 'success' });
-    setTimeout(() => navigate('/login'), 1500);
+    setTimeout(() => navigate('/host/dashboard'), 1500);
   };
 
   return (

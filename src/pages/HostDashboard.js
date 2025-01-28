@@ -31,7 +31,7 @@ const HostDashboard = () => {
         <div><Link to={'/login'}><button className="text-xl font-semibold text-gray-700">&lt;&lt; Back</button></Link></div>
         
         <h1 className="text-3xl font-bold">
-          Welcome, {user?.username || 'Host'}
+        Welcome, {user?.username ?? 'Host'}
         </h1>
         <Link 
           to="/recipe/new" 
