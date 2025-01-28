@@ -7,8 +7,10 @@ export const useAuth = () => {
   const userType = useSelector((state) => state.auth.userType);
 
   const loginHandler = (userData, type) => {
+    console.log('Logging in user:', userData);
     dispatch(login({ user: userData, type }));
   };
+  
 
   const logoutHandler = () => {
     dispatch(logout());
