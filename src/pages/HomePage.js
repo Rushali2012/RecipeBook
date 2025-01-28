@@ -12,7 +12,7 @@ const HomePage = () => {
         <div className="space-x-4">
           <Link 
             to="/guest/recipes" 
-            className="bg-[#46708d]  text-white px-6 py-3 rounded-lg hover:bg-[#203e53] transition"
+            className="bg-[#557e9b] text-black px-6 py-3 rounded-lg hover:bg-[#203e53] hover:text-white transition"
           >
             Browse Recipes
           </Link>

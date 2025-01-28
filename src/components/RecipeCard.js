@@ -12,7 +12,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden">
+    <div className="bg-white shadow-md rounded-xl overflow-hidden transform hover:translate-y-[-10px]">
       <Link to={`/recipe/${recipe.idMeal}`}>
         <img 
           src={recipe.strMealThumb} 

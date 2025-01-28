@@ -59,7 +59,7 @@ const Navbar = () => {
           </label>
 
           <div className="relative user-dropdown">
-            <FontAwesomeIcon
+          <FontAwesomeIcon
               icon={faUser}
               className="cursor-pointer"
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
