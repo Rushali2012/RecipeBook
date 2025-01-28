@@ -152,7 +152,6 @@ const RecipeDetail = () => {
         )}
       </div>
 
-      {/* Recipe Title and Image */}
       <div className="mt-8">
         <div className="flex flex-col md:flex-row justify-center items-center gap-8">
           <div >
@@ -171,7 +170,6 @@ const RecipeDetail = () => {
         <hr className="border-t-2 border-gray-300 my-6" />
       </div>
 
-      {/* Ingredients and Instructions Section */}
       <div className="flex flex-col md:flex-row gap-16">
         <div className="w-full md:w-1/3">
           <h2 className="text-2xl font-semibold text-gray-800 mb-4">Ingredients</h2>
