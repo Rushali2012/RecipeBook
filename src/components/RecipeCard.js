@@ -56,12 +56,12 @@ const RecipeCard = ({ recipe, onDelete, source}) => {
       </Link>
       {userType === 'host' && (
         <>
-          <button
+          {/* <button
             onClick={() => setIsModalOpen(true)}
             className="text-red-600 hover:text-red-800 mb-4 ml-5"
           >
             Delete
-          </button>
+          </button> */}
 
           {isModalOpen && (
             <div

@@ -9,21 +9,32 @@ const HostDashboard = () => {
   const { user } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredRecipes, setFilteredRecipes] = useState(recipes);
+  const [showModal, setShowModal] = useState(false);
+  const [recipeToDelete, setRecipeToDelete] = useState(null);
 
   useEffect(() => {
     const filtered = recipes.filter(recipe => 
       recipe.strMeal.toLowerCase().includes(searchQuery.toLowerCase()) 
-      // recipe.strCategory.toLowerCase().includes(searchQuery.toLowerCase())
     );
     setFilteredRecipes(filtered);
   }, [searchQuery, recipes]);
 
   const handleDelete = (recipeId) => {
-    deleteRecipe(recipeId);
+    setRecipeToDelete(recipeId);
+    setShowModal(true);
   };
 
-  console.log('User:', user);
-  console.log('Recipes:', recipes);
+  const confirmDelete = () => {
+    if (recipeToDelete) {
+      deleteRecipe(recipeToDelete);
+      setShowModal(false);
+    }
+  };
+
+  const cancelDelete = () => {
+    setShowModal(false);
+    setRecipeToDelete(null);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8 mt-11">
@@ -31,7 +42,7 @@ const HostDashboard = () => {
         <div><Link to={'/login'}><button className="text-xl font-semibold text-gray-700">&lt;&lt; Back</button></Link></div>
         
         <h1 className="text-3xl font-bold">
-        Welcome, {user?.username ?? 'Host'}
+          Welcome, {user?.username ?? 'Host'}
         </h1>
         <Link 
           to="/recipe/new" 
@@ -56,17 +67,35 @@ const HostDashboard = () => {
       ) : filteredRecipes.length > 0 ? (
         <div className="grid md:grid-cols-3 sm:grid-cols-2 gap-6">
           {filteredRecipes.map(recipe => (
-            <RecipeCard 
-              key={recipe.idMeal} 
-              recipe={recipe} 
-              source="host"
-              onDelete={() => handleDelete(recipe.idMeal)}
-            />
+            <div key={recipe.idMeal} className="relative">
+              <RecipeCard 
+                recipe={recipe} 
+                source="host"
+              />
+              <button
+                onClick={() => handleDelete(recipe.idMeal)} 
+                className="absolute top-2 right-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </div>
           ))}
         </div>
       ) : (
         <div className="text-center text-black-600 mt-[4rem]">
           No recipes found matching your search.
+        </div>
+      )}
+
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-xl mb-4">Are you sure you want to delete this recipe?</h2>
+            <div className="flex justify-end gap-4">
+              <button onClick={cancelDelete} className="bg-gray-500 text-white px-4 py-2 rounded">Cancel</button>
+              <button onClick={confirmDelete} className="bg-red-600 text-white px-4 py-2 rounded">Confirm</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
