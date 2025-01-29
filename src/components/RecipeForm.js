@@ -145,77 +145,90 @@ useEffect(() => {
         )}
       </div>
 
-      <div className="mb-4">
-        <label className="block mb-2">Ingredients</label>
-        <FieldArray name="ingredients">
-          {({ push, remove }) => (
-            <div>
-              {values.ingredients.map((ingredient, index) => (
-                <div key={index} className="flex flex-col mb-2">
-                  <Field
-                    name={`ingredients[${index}]`}
-                    placeholder="Ingredients..."
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  {touched.ingredients && touched.ingredients[index] && errors.ingredients && errors.ingredients[index] && (
-                    <div className="text-red-500 text-sm">{errors.ingredients[index]}</div>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="text-red-500 mt-1"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
+<div className="mb-4">
+  <label className="block mb-2">Ingredients</label>
+  <FieldArray name="ingredients">
+    {({ push, remove }) => (
+      <div>
+        {values.ingredients.map((ingredient, index) => (
+          <div key={index} className="mb-2">
+            <div className="flex flex-cols-2 gap-2">
+              <Field
+                name={`ingredients[${index}]`}
+                placeholder="Ingredients..."
+                className="w-full px-3 py-2 border rounded"
+              />
               <button
                 type="button"
-                onClick={() => push('')}
-                className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+                onClick={() => remove(index)}
+                className="text-white rounded-sm bg-[#e75d5d] w-5"
               >
-                Add Ingredient
+                -
               </button>
             </div>
-          )}
-        </FieldArray>
+            {touched.ingredients && touched.ingredients[index] && errors.ingredients && errors.ingredients[index] && (
+              <div className="text-red-500 text-sm mt-1">{errors.ingredients[index]}</div>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => push('')}
+          className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+        >
+          +
+        </button>
+        {values.ingredients.length === 0 && touched.ingredients && (
+          <div className="text-red-500 text-sm mt-1">At least one ingredient is required.</div>
+        )}
       </div>
+    )}
+  </FieldArray>
+</div>
 
-      <div className="mb-4">
-        <label className="block mb-2">Steps</label>
-        <FieldArray name="steps">
-          {({ push, remove }) => (
-            <div>
-              {values.steps.map((step, index) => (
-                <div key={index} className="flex flex-col mb-2">
-                  <Field
-                    name={`steps[${index}]`}
-                    placeholder="Steps..."
-                    className="w-full px-3 py-2 border rounded"
-                  />
-                  {touched.steps && touched.steps[index] && errors.steps && errors.steps[index] && (
-                    <div className="text-red-500 text-sm">{errors.steps[index]}</div>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => remove(index)}
-                    className="text-red-500 mt-1"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
+<div className="mb-4">
+  <label className="block mb-2">Steps</label>
+  <FieldArray name="steps">
+    {({ push, remove }) => (
+      <div>
+        {values.steps.map((step, index) => (
+          <div key={index} className="mb-2">
+            <div className="flex flex-cols-2 gap-2">
+              <Field
+                name={`steps[${index}]`}
+                placeholder="Steps..."
+                className="w-full px-3 py-2 border rounded"
+              />
               <button
                 type="button"
-                onClick={() => push('')}
-                className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+                onClick={() => remove(index)}
+                className="text-white rounded-sm bg-[#e75d5d] w-5"
               >
-                Add Step
+                -
               </button>
             </div>
-          )}
-        </FieldArray>
+            {touched.steps && touched.steps[index] && errors.steps && errors.steps[index] && (
+              <div className="text-red-500 text-sm mt-1">{errors.steps[index]}</div>
+            )}
+          </div>
+        ))}
+        <button
+          type="button"
+          onClick={() => push('')}
+          className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+        >
+          +
+        </button>
+        {values.steps.length === 0 && touched.steps && (
+          <div className="text-red-500 text-sm mt-1">At least one step is required.</div>
+        )}
       </div>
+    )}
+  </FieldArray>
+</div>
+
+
+
 
       <div className="flex gap-x-2 justify-evenly">
         <button

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useAuth } from './context/AuthContext';  // Import the useAuth hook
+import { useAuth } from './context/AuthContext';  
 import { RecipeProvider } from './context/RecipeContext';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
