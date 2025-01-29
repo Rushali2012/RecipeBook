@@ -13,7 +13,7 @@ import RecipeForm from './components/RecipeForm';
 
 function App() {
   const { user, logout } = useAuth(); 
-  const [isDropdownDisabled, setIsDropdownDisabled] = useState(false);
+  const [isDropdownDisabled, ] = useState(false);
 
   return (
     <Router>
@@ -21,11 +21,12 @@ function App() {
         <div className="min-h-screen bg-gray-100">
           <Navbar isDropdownDisabled={isDropdownDisabled} user={user} logout={logout} />
           <Routes>
-            <Route path="/" element={<HomePage />} />
+            <Route path='/home' element={<HomePage/>}/>
+            <Route path="/" element={<GuestRecipePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/host/dashboard" element={<HostDashboard />} />
-            <Route path="/guest/recipes" element={<GuestRecipePage />} />
+            <Route path="/dashboard" element={<HostDashboard />} />
+            <Route path="/recipes" element={<GuestRecipePage />} />
             <Route path="/recipe/:id" element={<RecipeDetail />} />
             <Route path="/recipe/new" element={<RecipeForm />} />
             <Route path="/recipe/edit/:id" element={<RecipeForm />} />

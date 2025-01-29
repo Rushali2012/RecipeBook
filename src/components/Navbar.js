@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faUser } from '@fortawesome/free-solid-svg-icons';
+// import HomePage from '../pages/HomePage';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -11,14 +12,19 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const handleToggle = () => {
-    setIsHost(!isHost);
+    if (isHost) {
+      setIsHost(false);
+      handleLogout();
+    } else {
+      setIsHost(true);
+    }
   };
 
   const handleLogout = () => {
     logout();
     setIsHost(false);
     setIsDropdownOpen(false);
-    navigate('/');
+    navigate('/home');
   };
 
   const handleLoginOrRegister = () => {
@@ -41,7 +47,7 @@ const Navbar = () => {
   return (
     <nav className="z-10 fixed top-0 w-full bg-[#72A0C1] p-8 text-black">
       <div className="container mx-auto flex justify-between items-center">
-        <Link to="/" className="ml-0 text-2xl font-bold">
+        <Link to="/home" className="ml-0 text-2xl font-bold">
           <FontAwesomeIcon icon={faUtensils} /> Recipe Book
         </Link>
         <div className="flex items-center space-x-5">
@@ -57,44 +63,44 @@ const Navbar = () => {
               Switch to Host user
             </span>
           </label>
-{isHost?
-          <div className="relative user-dropdown">
-          <FontAwesomeIcon
-              icon={faUser}
-              className="cursor-pointer"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            />
-
-            {isDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2">
-                {isHost && !user ? (
-                  <>
-                    <Link
-                      to="/login"
-                      onClick={handleLoginOrRegister}
-                      className="block px-4 py-2 text-black hover:bg-gray-200"
+          {isHost && (
+            <div className="relative user-dropdown">
+              <FontAwesomeIcon
+                icon={faUser}
+                className="cursor-pointer"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              />
+              {isDropdownOpen && (
+                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2">
+                  {isHost && !user ? (
+                    <>
+                      <Link
+                        to="/login"
+                        onClick={handleLoginOrRegister}
+                        className="block px-4 py-2 text-black hover:bg-gray-200"
+                      >
+                        Login
+                      </Link>
+                      <Link
+                        to="/register"
+                        onClick={handleLoginOrRegister}
+                        className="block px-4 py-2 text-black hover:bg-gray-200"
+                      >
+                        Register
+                      </Link>
+                    </>
+                  ) : user ? (
+                    <button
+                      onClick={handleLogout}
+                      className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200"
                     >
-                      Login
-                    </Link>
-                    <Link
-                      to="/register"
-                      onClick={handleLoginOrRegister}
-                      className="block px-4 py-2 text-black hover:bg-gray-200"
-                    >
-                      Register
-                    </Link>
-                  </>
-                ) : user ? (
-                  <button
-                    onClick={handleLogout}
-                    className="block w-full text-left px-4 py-2 text-black hover:bg-gray-200"
-                  >
-                    Logout
-                  </button>
-                ) : null}
-              </div>
-            )}
-          </div>:""}
+                      Logout
+                    </button>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </nav>

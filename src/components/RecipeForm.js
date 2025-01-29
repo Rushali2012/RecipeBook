@@ -14,7 +14,6 @@ const validationSchema = Yup.object({
   steps: Yup.array().of(Yup.string().required('Step is required')).min(1, 'At least one step is required')
 });
 
-
 const RecipeForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -65,17 +64,18 @@ const RecipeForm = () => {
     } else {
       addRecipe(values); 
     }
-    navigate('/host/dashboard');
+    navigate('/dashboard');
   };
 
   if (userType !== 'host') {
-    return <div className="text-center mt-[4rem]">Access Denied</div>;
+    return <div className="text-center mt-24">Access Denied</div>;
   }
 
   return (
-    <div className="container mx-auto  px-4 py-8 mt-20">
+    <div
+      className="container mx-auto px-4 py-8 mt-20"
       
-
+    >
       <Formik
         enableReinitialize={true}
         initialValues={formData}
@@ -86,7 +86,7 @@ const RecipeForm = () => {
       >
         {({ values, errors, touched, handleSubmit, setTouched }) => (
           <Form
-            className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md"
+            className="max-h-[21cm] w-[15cm] overflow-auto mx-auto scrollbar-thin bg-white p-8 rounded-lg shadow-md"
             onSubmit={(e) => {
               e.preventDefault();
               setTouched({});
@@ -94,16 +94,16 @@ const RecipeForm = () => {
             }}
             noValidate
           >
-            <div className="mb-4">
-            <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 rounded-lg shadow-md text-2xl  text-center mb-8 ">
-        {id ? 'Update Recipe' : 'Add Recipe'}
-      </h3>
-              <label className="block mb-2">Recipe Name</label>
+            <div className="mb-4 ">
+              <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 rounded-lg shadow-md text-2xl  text-center mb-8 ">
+                {id ? 'Update Recipe' : 'Add Recipe'}
+              </h3>
+              <label className=" mb-2 flex gap-1 ">Recipe Name <h6 class="text-red-600"> *</h6></label>
               <Field
                 type="text"
                 name="strMeal"
                 placeholder="Name of the Recipe"
-                className="w-full px-3 py-2 border rounded"
+                className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                 required
               />
               {touched.strMeal && errors.strMeal && (
@@ -112,8 +112,8 @@ const RecipeForm = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Category</label>
-              <Field as="select" name="strCategory" className="w-full border-2 border-b-2">
+              <label className="flex gap-1 mb-2">Category <h6 class="text-red-600"> *</h6></label>
+              <Field as="select" name="strCategory" className={`hover:bg-gray-100 w-full border-2 border-b-2 ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}>
                 <option value="">Select a Category</option>
                 <option value="Seafood">Seafood</option>
                 <option value="Side">Side</option>
@@ -132,12 +132,12 @@ const RecipeForm = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Image URL</label>
+              <label className="flex gap-1 mb-2">Image URL<h6 class="text-red-600"> *</h6></label>
               <Field
                 type="text"
                 name="strMealThumb"
-                placeholder="Image link..."
-                className="w-full px-3 py-2 border rounded"
+                placeholder="Image url..."
+                className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                 required
               />
               {touched.strMealThumb && errors.strMealThumb && (
@@ -146,7 +146,7 @@ const RecipeForm = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Ingredients</label>
+              <label className="flex gap-1 mb-2">Ingredients <h6 class="text-red-600"> *</h6></label>
               <FieldArray name="ingredients">
                 {({ push, remove }) => (
                   <div>
@@ -156,15 +156,17 @@ const RecipeForm = () => {
                           <Field
                             name={`ingredients[${index}]`}
                             placeholder="Ingredients..."
-                            className="w-full px-3 py-2 border rounded"
+                            className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                           />
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
-                          >
-                            -
-                          </button>
+                          {index > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => remove(index)}
+                              className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
+                            >
+                              -
+                            </button>
+                          )}
                         </div>
                         {touched.ingredients && touched.ingredients[index] && errors.ingredients && errors.ingredients[index] && (
                           <div className="text-red-500 text-sm mt-1">{errors.ingredients[index]}</div>
@@ -187,7 +189,7 @@ const RecipeForm = () => {
             </div>
 
             <div className="mb-4">
-              <label className="block mb-2">Steps</label>
+              <label className="flex gap-1 mb-2">Steps<h6 class="text-red-600"> *</h6></label>
               <FieldArray name="steps">
                 {({ push, remove }) => (
                   <div>
@@ -197,15 +199,17 @@ const RecipeForm = () => {
                           <Field
                             name={`steps[${index}]`}
                             placeholder="Steps..."
-                            className="w-full px-3 py-2 border rounded"
+                            className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                           />
-                          <button
-                            type="button"
-                            onClick={() => remove(index)}
-                            className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
-                          >
-                            -
-                          </button>
+                          {index > 0 && (
+                            <button
+                              type="button"
+                              onClick={() => remove(index)}
+                              className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
+                            >
+                              -
+                            </button>
+                          )}
                         </div>
                         {touched.steps && touched.steps[index] && errors.steps && errors.steps[index] && (
                           <div className="text-red-500 text-sm mt-1">{errors.steps[index]}</div>
@@ -234,16 +238,17 @@ const RecipeForm = () => {
               >
                 {id ? 'Update Recipe' : 'Add Recipe'}
               </button>
-              <Link to={'/host/dashboard'}>
+              <Link to={'/dashboard'}>
                 <button type="button" className="w-[150px] bg-gray-500 text-white py-2 rounded hover:bg-gray-600">Cancel</button>
               </Link>
             </div>
+            {!id ? <p class="text-red-600 mt-3"> * Fields are required</p> : ""}
           </Form>
         )}
       </Formik>
-
     </div>
   );
 };
 
 export default RecipeForm;
+

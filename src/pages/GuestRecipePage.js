@@ -19,7 +19,7 @@ const GuestRecipePage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 mt-20">
-      <div><Link to={'/'}><button className="text-xl font-semibold text-gray-700">&lt;&lt; Back</button></Link></div>
+      {/* <div><Link to={'/'}><button className="text-xl font-semibold text-gray-700">&lt;&lt; Back</button></Link></div> */}
 
       <input
         type="text"

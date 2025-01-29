@@ -28,9 +28,9 @@ const RecipeDetail = () => {
 
   const handleBackClick = () => {
     if (source === 'host') {
-      navigate('/host/dashboard');
+      navigate('/dashboard');
     } else {
-      navigate('/guest/recipes');
+      navigate('/recipes');
     }
   };
 
