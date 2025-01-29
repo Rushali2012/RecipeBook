@@ -35,7 +35,7 @@ const RecipeDetail = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 mt-12">
+    <div className="max-w-6xl mx-auto px-4 py-8 mt-20">
       <div className="flex items-center justify-between mb-8">
         <button
           onClick={handleBackClick}

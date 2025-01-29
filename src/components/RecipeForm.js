@@ -14,6 +14,7 @@ const validationSchema = Yup.object({
   steps: Yup.array().of(Yup.string().required('Step is required')).min(1, 'At least one step is required')
 });
 
+
 const RecipeForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -30,33 +31,30 @@ const RecipeForm = () => {
     steps: ['']
   });
 
-
-useEffect(() => {
-  if (id) {
-    const existingRecipe = recipes.find(r => r.idMeal === id);
-    if (existingRecipe) {
-      const ingredients = [];
-      for (let i = 1; i <= 20; i++) {
-        const ingredient = existingRecipe[`strIngredient${i}`];
-        if (ingredient) {
-          ingredients.push(ingredient.trim());
+  useEffect(() => {
+    if (id) {
+      const existingRecipe = recipes.find(r => r.idMeal === id);
+      if (existingRecipe) {
+        const ingredients = [];
+        for (let i = 1; i <= 20; i++) {
+          const ingredient = existingRecipe[`strIngredient${i}`];
+          if (ingredient) {
+            ingredients.push(ingredient.trim());
+          }
         }
+
+        setFormData({
+          idMeal: existingRecipe.idMeal,
+          strMeal: existingRecipe.strMeal,
+          strCategory: existingRecipe.strCategory,
+          strMealThumb: existingRecipe.strMealThumb,
+          strInstructions: existingRecipe.strInstructions || '',
+          ingredients: ingredients.length ? ingredients : [''],  
+          steps: existingRecipe.strInstructions ? existingRecipe.strInstructions.split('\n').map(step => step.trim()) : ['']
+        });
       }
-
-      setFormData({
-        idMeal: existingRecipe.idMeal,
-        strMeal: existingRecipe.strMeal,
-        strCategory: existingRecipe.strCategory,
-        strMealThumb: existingRecipe.strMealThumb,
-        strInstructions: existingRecipe.strInstructions || '',
-        ingredients: ingredients.length ? ingredients : [''],  
-        steps: existingRecipe.strInstructions ? existingRecipe.strInstructions.split('\n').map(step => step.trim()) : ['']
-      });
     }
-  }
-}, [id, recipes]);
-
-  
+  }, [id, recipes]);
 
   const handleSubmit = (values) => {
     values.strIngredient = values.ingredients.join('\n');
@@ -75,175 +73,174 @@ useEffect(() => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-12">
+    <div className="container mx-auto  px-4 py-8 mt-20">
       
-      
 
-<Formik
-  enableReinitialize={true}
-  initialValues={formData}
-  validationSchema={validationSchema}
-  onSubmit={handleSubmit}
-  validateOnBlur={false}
-  validateOnChange={true}
->
-  {({ values, errors, touched, handleSubmit, setTouched }) => (
-    <Form
-      className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setTouched({});
-        handleSubmit();
-      }}
-      noValidate
-    >
-      <div className="mb-4">
-        <label className="block mb-2">Recipe Name</label>
-        <Field
-          type="text"
-          name="strMeal"
-          placeholder="Name of the Recipe"
-          className="w-full px-3 py-2 border rounded"
-          required
-        />
-        {touched.strMeal && errors.strMeal && (
-          <div className="text-red-500 text-sm">{errors.strMeal}</div>
-        )}
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-2">Category</label>
-        <Field as="select" name="strCategory" className="w-full border-2 border-b-2">
-          <option value="">Select a Category</option>
-          <option value="Seafood">Seafood</option>
-          <option value="Side">Side</option>
-          <option value="Vegetarian">Vegetarian</option>
-          <option value="Beef">Beef</option>
-          <option value="Pork">Pork</option>
-          <option value="Pasta">Pasta</option>
-          <option value="Dessert">Dessert</option>
-          <option value="Miscellaneous">Miscellaneous</option>
-          <option value="Lamb">Lamb</option>
-          <option value="Chicken">Chicken</option>
-        </Field>
-        {touched.strCategory && errors.strCategory && (
-          <div className="text-red-500 text-sm">{errors.strCategory}</div>
-        )}
-      </div>
-
-      <div className="mb-4">
-        <label className="block mb-2">Image URL</label>
-        <Field
-          type="text"
-          name="strMealThumb"
-          placeholder="Image link..."
-          className="w-full px-3 py-2 border rounded"
-          required
-        />
-        {touched.strMealThumb && errors.strMealThumb && (
-          <div className="text-red-500 text-sm">{errors.strMealThumb}</div>
-        )}
-      </div>
-
-<div className="mb-4">
-  <label className="block mb-2">Ingredients</label>
-  <FieldArray name="ingredients">
-    {({ push, remove }) => (
-      <div>
-        {values.ingredients.map((ingredient, index) => (
-          <div key={index} className="mb-2">
-            <div className="flex flex-cols-2 gap-2">
+      <Formik
+        enableReinitialize={true}
+        initialValues={formData}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
+        validateOnBlur={false}
+        validateOnChange={true}
+      >
+        {({ values, errors, touched, handleSubmit, setTouched }) => (
+          <Form
+            className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md"
+            onSubmit={(e) => {
+              e.preventDefault();
+              setTouched({});
+              handleSubmit();
+            }}
+            noValidate
+          >
+            <div className="mb-4">
+            <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 rounded-lg shadow-md text-2xl  text-center mb-8 ">
+        {id ? 'Update Recipe' : 'Add Recipe'}
+      </h3>
+              <label className="block mb-2">Recipe Name</label>
               <Field
-                name={`ingredients[${index}]`}
-                placeholder="Ingredients..."
+                type="text"
+                name="strMeal"
+                placeholder="Name of the Recipe"
                 className="w-full px-3 py-2 border rounded"
+                required
               />
-              <button
-                type="button"
-                onClick={() => remove(index)}
-                className="text-white rounded-sm bg-[#e75d5d] w-5"
-              >
-                -
-              </button>
+              {touched.strMeal && errors.strMeal && (
+                <div className="text-red-500 text-sm">{errors.strMeal}</div>
+              )}
             </div>
-            {touched.ingredients && touched.ingredients[index] && errors.ingredients && errors.ingredients[index] && (
-              <div className="text-red-500 text-sm mt-1">{errors.ingredients[index]}</div>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => push('')}
-          className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
-        >
-          +
-        </button>
-        {values.ingredients.length === 0 && touched.ingredients && (
-          <div className="text-red-500 text-sm mt-1">At least one ingredient is required.</div>
-        )}
-      </div>
-    )}
-  </FieldArray>
-</div>
 
-<div className="mb-4">
-  <label className="block mb-2">Steps</label>
-  <FieldArray name="steps">
-    {({ push, remove }) => (
-      <div>
-        {values.steps.map((step, index) => (
-          <div key={index} className="mb-2">
-            <div className="flex flex-cols-2 gap-2">
+            <div className="mb-4">
+              <label className="block mb-2">Category</label>
+              <Field as="select" name="strCategory" className="w-full border-2 border-b-2">
+                <option value="">Select a Category</option>
+                <option value="Seafood">Seafood</option>
+                <option value="Side">Side</option>
+                <option value="Vegetarian">Vegetarian</option>
+                <option value="Beef">Beef</option>
+                <option value="Pork">Pork</option>
+                <option value="Pasta">Pasta</option>
+                <option value="Dessert">Dessert</option>
+                <option value="Miscellaneous">Miscellaneous</option>
+                <option value="Lamb">Lamb</option>
+                <option value="Chicken">Chicken</option>
+              </Field>
+              {touched.strCategory && errors.strCategory && (
+                <div className="text-red-500 text-sm">{errors.strCategory}</div>
+              )}
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Image URL</label>
               <Field
-                name={`steps[${index}]`}
-                placeholder="Steps..."
+                type="text"
+                name="strMealThumb"
+                placeholder="Image link..."
                 className="w-full px-3 py-2 border rounded"
+                required
               />
-              <button
-                type="button"
-                onClick={() => remove(index)}
-                className="text-white rounded-sm bg-[#e75d5d] w-5"
-              >
-                -
-              </button>
+              {touched.strMealThumb && errors.strMealThumb && (
+                <div className="text-red-500 text-sm">{errors.strMealThumb}</div>
+              )}
             </div>
-            {touched.steps && touched.steps[index] && errors.steps && errors.steps[index] && (
-              <div className="text-red-500 text-sm mt-1">{errors.steps[index]}</div>
-            )}
-          </div>
-        ))}
-        <button
-          type="button"
-          onClick={() => push('')}
-          className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
-        >
-          +
-        </button>
-        {values.steps.length === 0 && touched.steps && (
-          <div className="text-red-500 text-sm mt-1">At least one step is required.</div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Ingredients</label>
+              <FieldArray name="ingredients">
+                {({ push, remove }) => (
+                  <div>
+                    {values.ingredients.map((ingredient, index) => (
+                      <div key={index} className="mb-2">
+                        <div className="flex flex-cols-2 gap-2">
+                          <Field
+                            name={`ingredients[${index}]`}
+                            placeholder="Ingredients..."
+                            className="w-full px-3 py-2 border rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
+                          >
+                            -
+                          </button>
+                        </div>
+                        {touched.ingredients && touched.ingredients[index] && errors.ingredients && errors.ingredients[index] && (
+                          <div className="text-red-500 text-sm mt-1">{errors.ingredients[index]}</div>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => push('')}
+                      className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+                    >
+                      +
+                    </button>
+                    {values.ingredients.length === 0 && touched.ingredients && (
+                      <div className="text-red-500 text-sm mt-1">At least one ingredient is required.</div>
+                    )}
+                  </div>
+                )}
+              </FieldArray>
+            </div>
+
+            <div className="mb-4">
+              <label className="block mb-2">Steps</label>
+              <FieldArray name="steps">
+                {({ push, remove }) => (
+                  <div>
+                    {values.steps.map((step, index) => (
+                      <div key={index} className="mb-2">
+                        <div className="flex flex-cols-2 gap-2">
+                          <Field
+                            name={`steps[${index}]`}
+                            placeholder="Steps..."
+                            className="w-full px-3 py-2 border rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => remove(index)}
+                            className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
+                          >
+                            -
+                          </button>
+                        </div>
+                        {touched.steps && touched.steps[index] && errors.steps && errors.steps[index] && (
+                          <div className="text-red-500 text-sm mt-1">{errors.steps[index]}</div>
+                        )}
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => push('')}
+                      className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+                    >
+                      +
+                    </button>
+                    {values.steps.length === 0 && touched.steps && (
+                      <div className="text-red-500 text-sm mt-1">At least one step is required.</div>
+                    )}
+                  </div>
+                )}
+              </FieldArray>
+            </div>
+
+            <div className="flex gap-x-2 justify-evenly">
+              <button
+                type="submit"
+                className="w-[50%] bg-blue-500 text-white py-2 rounded hover:bg-blue-600 "
+              >
+                {id ? 'Update Recipe' : 'Add Recipe'}
+              </button>
+              <Link to={'/host/dashboard'}>
+                <button type="button" className="w-[150px] bg-gray-500 text-white py-2 rounded hover:bg-gray-600">Cancel</button>
+              </Link>
+            </div>
+          </Form>
         )}
-      </div>
-    )}
-  </FieldArray>
-</div>
-
-
-
-
-      <div className="flex gap-x-2 justify-evenly">
-        <button
-          type="submit"
-          className="w-[50%] bg-blue-500 text-white py-2 rounded hover:bg-blue-600 "
-        >
-          {id ? 'Update Recipe' : 'Add Recipe'}
-        </button>
-        <Link to={'/host/dashboard'}>
-          <button type="button" className="w-[150px] bg-gray-500 text-white py-2 rounded hover:bg-gray-600">Cancel</button>
-        </Link>
-      </div>
-    </Form>
-  )}
-</Formik>
+      </Formik>
 
     </div>
   );

@@ -39,7 +39,7 @@ const Navbar = () => {
   }, [isDropdownOpen]);
 
   return (
-    <nav className="z-10 fixed top-0 w-full bg-[#72A0C1] p-4 text-black">
+    <nav className="z-10 fixed top-0 w-full bg-[#72A0C1] p-8 text-black">
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="ml-0 text-2xl font-bold">
           <FontAwesomeIcon icon={faUtensils} /> Recipe Book

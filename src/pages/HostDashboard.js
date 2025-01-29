@@ -37,7 +37,7 @@ const HostDashboard = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-11">
+    <div className="container mx-auto px-4 py-8 mt-20">
       <div className="flex justify-between items-center mb-8 mt-5">
         <div><Link to={'/login'}><button className="text-xl font-semibold text-gray-700">&lt;&lt; Back</button></Link></div>
         
@@ -74,7 +74,7 @@ const HostDashboard = () => {
               />
               <button
                 onClick={() => handleDelete(recipe.idMeal)} 
-                className="absolute top-2 right-2 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+                className="absolute bottom-5 right-5 text-[red] px-4 py-2 rounded hover:text-white hover:bg-red-600"
               >
                 Delete
               </button>

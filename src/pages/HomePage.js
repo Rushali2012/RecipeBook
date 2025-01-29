@@ -32,37 +32,65 @@
 
 // export default HomePage;
 
-// in this page image should be in the left side with gradient effect to he whole page and 
-// in the right side there is a card with a welcome message and a link to browse recipes
 
+// import React from 'react';
+// import { Link } from 'react-router-dom';
+
+// const HomePage = () => {
+//   return (
+//     <div className="min-h-screen flex">
+//       <div className="w-1/2 relative">
+      
+//         <img 
+//           className="w-full h-full object-cover" 
+//           src="https://t4.ftcdn.net/jpg/09/23/42/11/240_F_923421104_mYOB6gXTT34T12InuDi0wKNtVI3IpYyf.jpg" 
+//           alt="Recipe Book" 
+//         />
+//         <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-white" />
+//       </div>
+
+//       <div className="w-1/2 flex flex-col justify-center items-center p-8 bg-white bg-opacity-80">
+//         <h1 className="text-4xl font-bold mb-6 text-gray-800">Welcome to Recipe Book</h1>
+//         <p className="text-xl mb-8 text-gray-600">
+//           Discover and Create Delicious Recipes
+//         </p>
+//         <div className="space-x-4">
+//           <Link 
+//             to="/guest/recipes" 
+//             className="bg-[#557e9b] text-black px-6 py-3 rounded-lg hover:bg-[#203e53] hover:text-white transition"
+//           >
+//             Browse Recipes
+//           </Link>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default HomePage;
 import React from 'react';
 import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen flex">
-      {/* Left Side - Full Height Image */}
-      <div className="w-1/2 relative">
+    <div className="min-h-screen relative">
+      <img 
+        className="w-full h-full object-cover " 
+        src="https://t4.ftcdn.net/jpg/09/23/42/11/240_F_923421104_mYOB6gXTT34T12InuDi0wKNtVI3IpYyf.jpg" 
+        alt="Recipe Book" 
+      />
       
-        <img 
-          className="w-full h-full object-cover" 
-          src="https://t4.ftcdn.net/jpg/09/23/42/11/240_F_923421104_mYOB6gXTT34T12InuDi0wKNtVI3IpYyf.jpg" 
-          alt="Recipe Book" 
-        />
-        {/* Transparent Gradient Overlay from Left to Right */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-white" />
-      </div>
-
-      {/* Right Side - Content Card */}
-      <div className="w-1/2 flex flex-col justify-center items-center p-8 bg-white bg-opacity-80">
+      {/* <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-white" /> */}
+      
+      <div className="text-center bg-white p-8 rounded-xl shadow-2xl absolute inset-0 flex flex-col justify-center items-center bg-opacity-40">
         <h1 className="text-4xl font-bold mb-6 text-gray-800">Welcome to Recipe Book</h1>
-        <p className="text-xl mb-8 text-gray-600">
+        <p className="text-xl mb-8 text-gray-700">
           Discover and Create Delicious Recipes
         </p>
         <div className="space-x-4">
           <Link 
             to="/guest/recipes" 
-            className="bg-[#557e9b] text-black px-6 py-3 rounded-lg hover:bg-[#203e53] hover:text-white transition"
+            className="bg-[#2f4f66] text-white px-6 py-3 rounded-lg hover:bg-[#203e53] hover:text-white transition"
           >
             Browse Recipes
           </Link>
