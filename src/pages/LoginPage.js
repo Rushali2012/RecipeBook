@@ -47,7 +47,8 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex  items-center justify-center bg-gray-100">
+      {/* <img class="h-[11.5cm] w-[13cm] rounded-lg" src='https://t3.ftcdn.net/jpg/05/01/90/38/240_F_501903811_pA3IGrb7DgwZeFfb3WY5GxtjgVinOMpm.jpg'/> */}
       <div className="bg-white p-9 rounded-xl shadow-md w-96">
         <div>
           <Link to={'/'}>

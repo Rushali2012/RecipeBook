@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -62,6 +61,8 @@ console.log("existingUsers",existingUsers);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      {/* <img class="h-[13cm] w-[13cm] rounded-lg" src='https://t4.ftcdn.net/jpg/10/81/41/95/240_F_1081419572_8gjg9dQFXDw953cO49asecGu4639A7WW.jpg'/> */}
+
       <div className="bg-white p-8 rounded-xl shadow-md w-96">
         <div>
           <Link to={'/'}>
