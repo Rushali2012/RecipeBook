@@ -105,7 +105,8 @@ const RecipeForm = () => {
   }
 
   return (
-    <div className="w-[50cm] h-[25cm] mx-auto px-4 py-8 bg-cover bg-no-repeat mt-20 bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]">
+    // <div className="w-full min-h-[25cm] mx-auto px-4 py-8 bg-cover bg-no-repeat mt-20 bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]">
+    <div className="flex flex-col min-h-screen bg-cover bg-no-repeat bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]">
       <Formik
         enableReinitialize={true}
         initialValues={formData}
@@ -116,7 +117,7 @@ const RecipeForm = () => {
       >
         {({ values, errors, touched, handleSubmit, setTouched }) => (
           <Form
-            className="flex flex-col h-[20cm] w-[15cm] mx-auto bg-blue-100 rounded-lg shadow-md"
+            className="flex flex-col h-[20cm] w-[15cm] mx-auto bg-blue-100 rounded-lg mt-32 shadow-md"
             onSubmit={(e) => {
               e.preventDefault();
               setTouched({});
@@ -125,19 +126,19 @@ const RecipeForm = () => {
             noValidate
           >
             <div className="p-4">
-              <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 rounded-lg shadow-md text-2xl text-center">
+              <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 mt-3 rounded-lg shadow-md text-2xl text-center">
                 <FontAwesomeIcon icon={faBowlFood} /> {id ? 'Update Recipe' : 'Add Recipe'}
               </h3>
             </div>
 
             <div className="flex-1 overflow-y-auto px-8">
               <div className="mb-4">
-                <label className="mb-2 text-black flex gap-1">Recipe Name <h6 className="text-red-600">*</h6></label>
+                <label className="mb-2 text-black flex mt-5 gap-1">Recipe Name <h6 className="text-red-600">*</h6></label>
                 <Field
                   type="text"
                   name="strMeal"
                   placeholder="Name of the Recipe"
-                  className={`w-full px-3 hover:bg-blue-100 hover:placeholder-black py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 hover:bg-blue-50 hover:placeholder-black py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                   required
                 />
                 {touched.strMeal && errors.strMeal && (
@@ -150,7 +151,7 @@ const RecipeForm = () => {
                 <Field 
                   as="select" 
                   name="strCategory" 
-                  className={`hover:bg-blue-100 hover:placeholder-black rounded w-full border-2 border-b-2 ${touched.strCategory && errors.strCategory ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`hover:bg-blue-50 hover:placeholder-black rounded w-full border-2 border-b-2 ${touched.strCategory && errors.strCategory ? 'border-red-500' : 'border-gray-300'}`}
                 >
                   <option value="">Select a Category</option>
                   <option value="Seafood">Seafood</option>
@@ -175,7 +176,7 @@ const RecipeForm = () => {
                   type="text"
                   name="strMealThumb"
                   placeholder="Image url..."
-                  className={`w-full px-3 py-2 border hover:bg-blue-100 hover:placeholder-black rounded ${touched.strMealThumb && errors.strMealThumb ? 'border-red-500' : 'border-gray-300'}`}
+                  className={`w-full px-3 py-2 border hover:bg-blue-50 hover:placeholder-black rounded ${touched.strMealThumb && errors.strMealThumb ? 'border-red-500' : 'border-gray-300'}`}
                   required
                 />
                 {touched.strMealThumb && errors.strMealThumb && (
@@ -194,7 +195,7 @@ const RecipeForm = () => {
                             <Field
                               name={`ingredients[${index}]`}
                               placeholder="Ingredients..."
-                              className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.ingredients?.[index] && errors.ingredients?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                              className={`w-full hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.ingredients?.[index] && errors.ingredients?.[index] ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {index > 0 && (
                               <button
@@ -234,7 +235,7 @@ const RecipeForm = () => {
                             <Field
                               name={`steps[${index}]`}
                               placeholder="Steps..."
-                              className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.steps?.[index] && errors.steps?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                              className={`w-full hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.steps?.[index] && errors.steps?.[index] ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {index > 0 && (
                               <button
@@ -290,3 +291,5 @@ const RecipeForm = () => {
 };
 
 export default RecipeForm;
+
+
