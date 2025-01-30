@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUtensils, faUser } from '@fortawesome/free-solid-svg-icons';
-// import HomePage from '../pages/HomePage';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
@@ -11,12 +10,21 @@ const Navbar = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleToggle = () => {
-    if (isHost) {
-      setIsHost(false);
-      handleLogout();
-    } else {
+  useEffect(() => {
+    const storedHostState = localStorage.getItem('isHost');
+    if (storedHostState === 'true') {
       setIsHost(true);
+    }
+  }, []);
+
+  const handleToggle = () => {
+    const newIsHost = !isHost;
+    setIsHost(newIsHost);
+    localStorage.setItem('isHost', newIsHost.toString());
+    
+    if (newIsHost) {
+    } else {
+      handleLogout();
     }
   };
 
@@ -24,6 +32,7 @@ const Navbar = () => {
     logout();
     setIsHost(false);
     setIsDropdownOpen(false);
+    localStorage.removeItem('isHost');
     navigate('/home');
   };
 
@@ -37,7 +46,7 @@ const Navbar = () => {
         setIsDropdownOpen(false);
       }
     };
-    
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);

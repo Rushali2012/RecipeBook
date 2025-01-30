@@ -5,7 +5,8 @@ import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBowlFood } from '@fortawesome/free-solid-svg-icons';
 const validationSchema = Yup.object({
   strMeal: Yup.string().required('Recipe Name is required'),
   strCategory: Yup.string().required('Category is required'),
@@ -73,9 +74,10 @@ const RecipeForm = () => {
 
   return (
     <div
-      className="container mx-auto px-4 py-8 mt-20"
+      className="w-[50cm] h-[25cm] mx-auto px-4 py-8 bg-cover bg-no-repeat mt-20 bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]"
       
     >
+      
       <Formik
         enableReinitialize={true}
         initialValues={formData}
@@ -86,7 +88,7 @@ const RecipeForm = () => {
       >
         {({ values, errors, touched, handleSubmit, setTouched }) => (
           <Form
-            className="max-h-[21cm] w-[15cm] overflow-auto mx-auto scrollbar-thin bg-white p-8 rounded-lg shadow-md"
+            className="max-h-[21cm] w-[15cm] overflow-auto hover:shadow-zinc-950 mx-auto scrollbar-thin p-8 bg-cover bg-opacity-50 bg-blue-200 rounded-lg shadow-md "
             onSubmit={(e) => {
               e.preventDefault();
               setTouched({});
@@ -96,24 +98,24 @@ const RecipeForm = () => {
           >
             <div className="mb-4 ">
               <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 rounded-lg shadow-md text-2xl  text-center mb-8 ">
-                {id ? 'Update Recipe' : 'Add Recipe'}
+                <FontAwesomeIcon icon={faBowlFood}/> {id ? 'Update Recipe' : 'Add Recipe'}
               </h3>
-              <label className=" mb-2 flex gap-1 ">Recipe Name <h6 class="text-red-600"> *</h6></label>
+              <label className=" mb-2 text-black flex gap-1">Recipe Name <h6 class="text-red-600"> *</h6></label>
               <Field
                 type="text"
                 name="strMeal"
                 placeholder="Name of the Recipe"
-                className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 hover:bg-blue-100 hover:placeholder-black py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                 required
               />
               {touched.strMeal && errors.strMeal && (
-                <div className="text-red-500 text-sm">{errors.strMeal}</div>
+                <div className="text-red-500 font-bold text-sm">{errors.strMeal}</div>
               )}
             </div>
 
             <div className="mb-4">
-              <label className="flex gap-1 mb-2">Category <h6 class="text-red-600"> *</h6></label>
-              <Field as="select" name="strCategory" className={`hover:bg-gray-100 w-full border-2 border-b-2 ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}>
+              <label className="flex text-black gap-1 mb-2">Category <h6 class="text-red-600"> *</h6></label>
+              <Field as="select" name="strCategory" className={`hover:bg-blue-100 hover:placeholder-black rounded  w-full border-2 border-b-2 ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}>
                 <option value="">Select a Category</option>
                 <option value="Seafood">Seafood</option>
                 <option value="Side">Side</option>
@@ -127,26 +129,26 @@ const RecipeForm = () => {
                 <option value="Chicken">Chicken</option>
               </Field>
               {touched.strCategory && errors.strCategory && (
-                <div className="text-red-500 text-sm">{errors.strCategory}</div>
+                <div className="text-red-500 font-bold text-sm">{errors.strCategory}</div>
               )}
             </div>
 
             <div className="mb-4">
-              <label className="flex gap-1 mb-2">Image URL<h6 class="text-red-600"> *</h6></label>
+              <label className="flex text-black gap-1 mb-2">Image URL<h6 class="text-red-600"> *</h6></label>
               <Field
                 type="text"
                 name="strMealThumb"
                 placeholder="Image url..."
-                className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full px-3 py-2 border hover:bg-blue-100 hover:placeholder-black rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                 required
               />
               {touched.strMealThumb && errors.strMealThumb && (
-                <div className="text-red-500 text-sm">{errors.strMealThumb}</div>
+                <div className="text-red-500 font-bold text-sm">{errors.strMealThumb}</div>
               )}
             </div>
 
             <div className="mb-4">
-              <label className="flex gap-1 mb-2">Ingredients <h6 class="text-red-600"> *</h6></label>
+              <label className="flex text-black gap-1 mb-2">Ingredients <h6 class="text-red-600"> *</h6></label>
               <FieldArray name="ingredients">
                 {({ push, remove }) => (
                   <div>
@@ -156,7 +158,7 @@ const RecipeForm = () => {
                           <Field
                             name={`ingredients[${index}]`}
                             placeholder="Ingredients..."
-                            className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                           />
                           {index > 0 && (
                             <button
@@ -169,7 +171,7 @@ const RecipeForm = () => {
                           )}
                         </div>
                         {touched.ingredients && touched.ingredients[index] && errors.ingredients && errors.ingredients[index] && (
-                          <div className="text-red-500 text-sm mt-1">{errors.ingredients[index]}</div>
+                          <div className="text-red-500 font-bold text-sm mt-1">{errors.ingredients[index]}</div>
                         )}
                       </div>
                     ))}
@@ -181,7 +183,7 @@ const RecipeForm = () => {
                       +
                     </button>
                     {values.ingredients.length === 0 && touched.ingredients && (
-                      <div className="text-red-500 text-sm mt-1">At least one ingredient is required.</div>
+                      <div className="text-red-500 font-bold text-sm mt-1">At least one ingredient is required.</div>
                     )}
                   </div>
                 )}
@@ -189,7 +191,7 @@ const RecipeForm = () => {
             </div>
 
             <div className="mb-4">
-              <label className="flex gap-1 mb-2">Steps<h6 class="text-red-600"> *</h6></label>
+              <label className="flex text-black gap-1 mb-2">Steps<h6 class="text-red-600"> *</h6></label>
               <FieldArray name="steps">
                 {({ push, remove }) => (
                   <div>
@@ -199,7 +201,7 @@ const RecipeForm = () => {
                           <Field
                             name={`steps[${index}]`}
                             placeholder="Steps..."
-                            className={`w-full px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
                           />
                           {index > 0 && (
                             <button
@@ -212,7 +214,7 @@ const RecipeForm = () => {
                           )}
                         </div>
                         {touched.steps && touched.steps[index] && errors.steps && errors.steps[index] && (
-                          <div className="text-red-500 text-sm mt-1">{errors.steps[index]}</div>
+                          <div className="text-red-500 font-bold text-sm mt-1">{errors.steps[index]}</div>
                         )}
                       </div>
                     ))}
@@ -224,7 +226,7 @@ const RecipeForm = () => {
                       +
                     </button>
                     {values.steps.length === 0 && touched.steps && (
-                      <div className="text-red-500 text-sm mt-1">At least one step is required.</div>
+                      <div className="text-red-500 font-bold text-sm mt-1">At least one step is required.</div>
                     )}
                   </div>
                 )}
@@ -234,7 +236,7 @@ const RecipeForm = () => {
             <div className="flex gap-x-2 justify-evenly">
               <button
                 type="submit"
-                className="w-[50%] bg-blue-500 text-white py-2 rounded hover:bg-blue-600 "
+                className="w-[50%] bg-blue-700 text-white py-2 rounded hover:bg-blue-800 "
               >
                 {id ? 'Update Recipe' : 'Add Recipe'}
               </button>
@@ -242,7 +244,7 @@ const RecipeForm = () => {
                 <button type="button" className="w-[150px] bg-gray-500 text-white py-2 rounded hover:bg-gray-600">Cancel</button>
               </Link>
             </div>
-            {!id ? <p class="text-red-600 mt-3"> * Fields are required</p> : ""}
+            {!id ? <p class="text-red-600 ml-5 mt-5"> *  Fields are required</p> : ""}
           </Form>
         )}
       </Formik>
@@ -252,3 +254,4 @@ const RecipeForm = () => {
 
 export default RecipeForm;
 
+// https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA
