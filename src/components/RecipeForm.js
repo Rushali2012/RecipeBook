@@ -117,7 +117,7 @@ const RecipeForm = () => {
       >
         {({ values, errors, touched, handleSubmit, setTouched }) => (
           <Form
-            className="flex flex-col h-[20cm] w-[15cm] mx-auto bg-blue-100 rounded-lg mt-32 shadow-md"
+            className="flex flex-col h-[20cm] w-[15cm] mx-auto bg-opacity-50 bg-blue-100 rounded-lg mt-32 shadow-md"
             onSubmit={(e) => {
               e.preventDefault();
               setTouched({});
