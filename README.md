@@ -3,8 +3,7 @@
 This is a React App consists of host and guest users. Guest users can only see the list of the recipe and host users can delete and edit existing recipes. Also, Add new recipe. Host user can do these all the operations after Register or Login. In the Add recipe functionality host user can add all the details of the recipe such as title, image url, 
 ingredients, steps and category of that recipe.
 
-![image](https://github.com/user-attachments/assets/616fa2d1-ae25-4683-8cb3-6c7ab54c4343)
-
+![alt text](image.png)
 ![image](https://github.com/user-attachments/assets/6ba7aa3d-1d2e-4f8f-9d37-65c4b76411c9)
 
 ![image](https://github.com/user-attachments/assets/69ae78ca-2c67-433f-8063-85d780dfacad)
