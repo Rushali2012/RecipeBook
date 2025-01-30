@@ -7,6 +7,7 @@ import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBowlFood } from '@fortawesome/free-solid-svg-icons';
+
 const validationSchema = Yup.object({
   strMeal: Yup.string().required('Recipe Name is required'),
   strCategory: Yup.string().required('Category is required'),
@@ -35,13 +36,34 @@ const RecipeForm = () => {
     if (id) {
       const existingRecipe = recipes.find(r => r.idMeal === id);
       if (existingRecipe) {
-        const ingredients = [];
-        for (let i = 1; i <= 20; i++) {
-          const ingredient = existingRecipe[`strIngredient${i}`];
-          if (ingredient) {
-            ingredients.push(ingredient.trim());
+        let ingredients = [];
+        
+        if (Array.isArray(existingRecipe.ingredients)) {
+          ingredients = [...new Set(existingRecipe.ingredients)];
+        } else if (existingRecipe.strIngredient) {
+          ingredients = [...new Set(existingRecipe.strIngredient.split('\n').filter(ing => ing.trim()))];
+        } else {
+          for (let i = 1; i <= 20; i++) {
+            const ingredient = existingRecipe[`strIngredient${i}`];
+            if (ingredient && ingredient.trim()) {
+              ingredients.push(ingredient.trim());
+            }
           }
         }
+
+        ingredients = [...new Set(ingredients.filter(ing => ing))];
+        
+        if (ingredients.length === 0) {
+          ingredients = [''];
+        }
+
+        const cleanedInstructions = existingRecipe.strInstructions
+          ? existingRecipe.strInstructions
+              .replace(/[\r\n]+/g, '\n')
+              .split('\n')
+              .map(step => step.trim())
+              .filter(step => step !== '')
+          : [''];
 
         setFormData({
           idMeal: existingRecipe.idMeal,
@@ -49,21 +71,31 @@ const RecipeForm = () => {
           strCategory: existingRecipe.strCategory,
           strMealThumb: existingRecipe.strMealThumb,
           strInstructions: existingRecipe.strInstructions || '',
-          ingredients: ingredients.length ? ingredients : [''],  
-          steps: existingRecipe.strInstructions ? existingRecipe.strInstructions.split('\n').map(step => step.trim()) : ['']
+          ingredients: ingredients,
+          steps: cleanedInstructions.length ? cleanedInstructions : ['']
         });
       }
     }
   }, [id, recipes]);
 
   const handleSubmit = (values) => {
-    values.strIngredient = values.ingredients.join('\n');
-    values.strInstructions = values.steps.join('\n');
+    const cleanedIngredients = [...new Set(values.ingredients.filter(ing => ing.trim()))];
+    
+    const recipeData = {
+      ...values,
+      ingredients: cleanedIngredients,
+      strIngredient: cleanedIngredients.join('\n'),
+      strInstructions: values.steps.join('\n'),
+      ...cleanedIngredients.reduce((acc, ing, idx) => {
+        acc[`strIngredient${idx + 1}`] = ing;
+        return acc;
+      }, {})
+    };
 
     if (id) {
-      updateRecipe(values); 
+      updateRecipe(recipeData);
     } else {
-      addRecipe(values); 
+      addRecipe(recipeData);
     }
     navigate('/dashboard');
   };
@@ -73,11 +105,7 @@ const RecipeForm = () => {
   }
 
   return (
-    <div
-      className="w-[50cm] h-[25cm] mx-auto px-4 py-8 bg-cover bg-no-repeat mt-20 bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]"
-      
-    >
-      
+    <div className="w-[50cm] h-[25cm] mx-auto px-4 py-8 bg-cover bg-no-repeat mt-20 bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]">
       <Formik
         enableReinitialize={true}
         initialValues={formData}
@@ -88,7 +116,7 @@ const RecipeForm = () => {
       >
         {({ values, errors, touched, handleSubmit, setTouched }) => (
           <Form
-            className="max-h-[21cm] w-[15cm] overflow-auto hover:shadow-zinc-950 mx-auto scrollbar-thin p-8 bg-cover bg-opacity-50 bg-blue-200 rounded-lg shadow-md "
+            className="flex flex-col h-[20cm] w-[15cm] mx-auto bg-blue-100 rounded-lg shadow-md"
             onSubmit={(e) => {
               e.preventDefault();
               setTouched({});
@@ -96,155 +124,164 @@ const RecipeForm = () => {
             }}
             noValidate
           >
-            <div className="mb-4 ">
-              <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 rounded-lg shadow-md text-2xl  text-center mb-8 ">
-                <FontAwesomeIcon icon={faBowlFood}/> {id ? 'Update Recipe' : 'Add Recipe'}
+            <div className="p-4">
+              <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 rounded-lg shadow-md text-2xl text-center">
+                <FontAwesomeIcon icon={faBowlFood} /> {id ? 'Update Recipe' : 'Add Recipe'}
               </h3>
-              <label className=" mb-2 text-black flex gap-1">Recipe Name <h6 class="text-red-600"> *</h6></label>
-              <Field
-                type="text"
-                name="strMeal"
-                placeholder="Name of the Recipe"
-                className={`w-full px-3 hover:bg-blue-100 hover:placeholder-black py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
-                required
-              />
-              {touched.strMeal && errors.strMeal && (
-                <div className="text-red-500 font-bold text-sm">{errors.strMeal}</div>
-              )}
             </div>
 
-            <div className="mb-4">
-              <label className="flex text-black gap-1 mb-2">Category <h6 class="text-red-600"> *</h6></label>
-              <Field as="select" name="strCategory" className={`hover:bg-blue-100 hover:placeholder-black rounded  w-full border-2 border-b-2 ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}>
-                <option value="">Select a Category</option>
-                <option value="Seafood">Seafood</option>
-                <option value="Side">Side</option>
-                <option value="Vegetarian">Vegetarian</option>
-                <option value="Beef">Beef</option>
-                <option value="Pork">Pork</option>
-                <option value="Pasta">Pasta</option>
-                <option value="Dessert">Dessert</option>
-                <option value="Miscellaneous">Miscellaneous</option>
-                <option value="Lamb">Lamb</option>
-                <option value="Chicken">Chicken</option>
-              </Field>
-              {touched.strCategory && errors.strCategory && (
-                <div className="text-red-500 font-bold text-sm">{errors.strCategory}</div>
-              )}
-            </div>
+            <div className="flex-1 overflow-y-auto px-8">
+              <div className="mb-4">
+                <label className="mb-2 text-black flex gap-1">Recipe Name <h6 className="text-red-600">*</h6></label>
+                <Field
+                  type="text"
+                  name="strMeal"
+                  placeholder="Name of the Recipe"
+                  className={`w-full px-3 hover:bg-blue-100 hover:placeholder-black py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
+                  required
+                />
+                {touched.strMeal && errors.strMeal && (
+                  <div className="text-red-500 font-bold text-sm">{errors.strMeal}</div>
+                )}
+              </div>
 
-            <div className="mb-4">
-              <label className="flex text-black gap-1 mb-2">Image URL<h6 class="text-red-600"> *</h6></label>
-              <Field
-                type="text"
-                name="strMealThumb"
-                placeholder="Image url..."
-                className={`w-full px-3 py-2 border hover:bg-blue-100 hover:placeholder-black rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
-                required
-              />
-              {touched.strMealThumb && errors.strMealThumb && (
-                <div className="text-red-500 font-bold text-sm">{errors.strMealThumb}</div>
-              )}
-            </div>
+              <div className="mb-4">
+                <label className="flex text-black gap-1 mb-2">Category <h6 className="text-red-600">*</h6></label>
+                <Field 
+                  as="select" 
+                  name="strCategory" 
+                  className={`hover:bg-blue-100 hover:placeholder-black rounded w-full border-2 border-b-2 ${touched.strCategory && errors.strCategory ? 'border-red-500' : 'border-gray-300'}`}
+                >
+                  <option value="">Select a Category</option>
+                  <option value="Seafood">Seafood</option>
+                  <option value="Side">Side</option>
+                  <option value="Vegetarian">Vegetarian</option>
+                  <option value="Beef">Beef</option>
+                  <option value="Pork">Pork</option>
+                  <option value="Pasta">Pasta</option>
+                  <option value="Dessert">Dessert</option>
+                  <option value="Miscellaneous">Miscellaneous</option>
+                  <option value="Lamb">Lamb</option>
+                  <option value="Chicken">Chicken</option>
+                </Field>
+                {touched.strCategory && errors.strCategory && (
+                  <div className="text-red-500 font-bold text-sm">{errors.strCategory}</div>
+                )}
+              </div>
 
-            <div className="mb-4">
-              <label className="flex text-black gap-1 mb-2">Ingredients <h6 class="text-red-600"> *</h6></label>
-              <FieldArray name="ingredients">
-                {({ push, remove }) => (
-                  <div>
-                    {values.ingredients.map((ingredient, index) => (
-                      <div key={index} className="mb-2">
-                        <div className="flex flex-cols-2 gap-2">
-                          <Field
-                            name={`ingredients[${index}]`}
-                            placeholder="Ingredients..."
-                            className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
-                          />
-                          {index > 0 && (
-                            <button
-                              type="button"
-                              onClick={() => remove(index)}
-                              className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
-                            >
-                              -
-                            </button>
+              <div className="mb-4">
+                <label className="flex text-black gap-1 mb-2">Image URL <h6 className="text-red-600">*</h6></label>
+                <Field
+                  type="text"
+                  name="strMealThumb"
+                  placeholder="Image url..."
+                  className={`w-full px-3 py-2 border hover:bg-blue-100 hover:placeholder-black rounded ${touched.strMealThumb && errors.strMealThumb ? 'border-red-500' : 'border-gray-300'}`}
+                  required
+                />
+                {touched.strMealThumb && errors.strMealThumb && (
+                  <div className="text-red-500 font-bold text-sm">{errors.strMealThumb}</div>
+                )}
+              </div>
+
+              <div className="mb-4">
+                <label className="flex text-black gap-1 mb-2">Ingredients <h6 className="text-red-600">*</h6></label>
+                <FieldArray name="ingredients">
+                  {({ push, remove }) => (
+                    <div>
+                      {values.ingredients.map((ingredient, index) => (
+                        <div key={index} className="mb-2">
+                          <div className="flex flex-cols-2 gap-2">
+                            <Field
+                              name={`ingredients[${index}]`}
+                              placeholder="Ingredients..."
+                              className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.ingredients?.[index] && errors.ingredients?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                            />
+                            {index > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => remove(index)}
+                                className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
+                              >
+                                -
+                              </button>
+                            )}
+                          </div>
+                          {touched.ingredients?.[index] && errors.ingredients?.[index] && (
+                            <div className="text-red-500 font-bold text-sm mt-1">{errors.ingredients[index]}</div>
                           )}
                         </div>
-                        {touched.ingredients && touched.ingredients[index] && errors.ingredients && errors.ingredients[index] && (
-                          <div className="text-red-500 font-bold text-sm mt-1">{errors.ingredients[index]}</div>
-                        )}
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => push('')}
-                      className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
-                    >
-                      +
-                    </button>
-                    {values.ingredients.length === 0 && touched.ingredients && (
-                      <div className="text-red-500 font-bold text-sm mt-1">At least one ingredient is required.</div>
-                    )}
-                  </div>
-                )}
-              </FieldArray>
-            </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => push('')}
+                        className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </FieldArray>
+              </div>
 
-            <div className="mb-4">
-              <label className="flex text-black gap-1 mb-2">Steps<h6 class="text-red-600"> *</h6></label>
-              <FieldArray name="steps">
-                {({ push, remove }) => (
-                  <div>
-                    {values.steps.map((step, index) => (
-                      <div key={index} className="mb-2">
-                        <div className="flex flex-cols-2 gap-2">
-                          <Field
-                            name={`steps[${index}]`}
-                            placeholder="Steps..."
-                            className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.strMeal && errors.strMeal ? 'border-red-500' : 'border-gray-300'}`}
-                          />
-                          {index > 0 && (
-                            <button
-                              type="button"
-                              onClick={() => remove(index)}
-                              className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
-                            >
-                              -
-                            </button>
+              <div className="mb-4">
+                <label className="flex text-black gap-1 mb-2">Steps <h6 className="text-red-600">*</h6></label>
+                <FieldArray name="steps">
+                  {({ push, remove }) => (
+                    <div>
+                      {values.steps.map((step, index) => (
+                        <div key={index} className="mb-2">
+                          <div className="flex flex-cols-2 gap-2">
+                            <Field
+                              name={`steps[${index}]`}
+                              placeholder="Steps..."
+                              className={`w-full hover:bg-blue-100 hover:placeholder-black px-3 py-2 border rounded ${touched.steps?.[index] && errors.steps?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                            />
+                            {index > 0 && (
+                              <button
+                                type="button"
+                                onClick={() => remove(index)}
+                                className="mt-1 bg-red-500 text-white py-1 px-3 rounded h-8 w-30"
+                              >
+                                -
+                              </button>
+                            )}
+                          </div>
+                          {touched.steps?.[index] && errors.steps?.[index] && (
+                            <div className="text-red-500 font-bold text-sm mt-1">{errors.steps[index]}</div>
                           )}
                         </div>
-                        {touched.steps && touched.steps[index] && errors.steps && errors.steps[index] && (
-                          <div className="text-red-500 font-bold text-sm mt-1">{errors.steps[index]}</div>
-                        )}
-                      </div>
-                    ))}
-                    <button
-                      type="button"
-                      onClick={() => push('')}
-                      className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
-                    >
-                      +
-                    </button>
-                    {values.steps.length === 0 && touched.steps && (
-                      <div className="text-red-500 font-bold text-sm mt-1">At least one step is required.</div>
-                    )}
-                  </div>
-                )}
-              </FieldArray>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => push('')}
+                        className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
+                      >
+                        +
+                      </button>
+                    </div>
+                  )}
+                </FieldArray>
+              </div>
             </div>
 
-            <div className="flex gap-x-2 justify-evenly">
-              <button
-                type="submit"
-                className="w-[50%] bg-blue-700 text-white py-2 rounded hover:bg-blue-800 "
-              >
-                {id ? 'Update Recipe' : 'Add Recipe'}
-              </button>
-              <Link to={'/dashboard'}>
-                <button type="button" className="w-[150px] bg-gray-500 text-white py-2 rounded hover:bg-gray-600">Cancel</button>
-              </Link>
+            <div className="p-4">
+              <div className="flex gap-x-2 justify-evenly">
+                <button
+                  type="submit"
+                  className="w-[50%] bg-blue-700 text-white py-2 rounded hover:bg-blue-800"
+                >
+                  {id ? 'Update Recipe' : 'Add Recipe'}
+                </button>
+                <Link to="/dashboard" className="w-[50%]">
+                  <button 
+                    type="button" 
+                    className="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600"
+                  >
+                    Cancel
+                  </button>
+                </Link>
+              </div>
             </div>
-            {!id ? <p class="text-red-600 ml-5 mt-5"> *  Fields are required</p> : ""}
           </Form>
         )}
       </Formik>
@@ -253,5 +290,3 @@ const RecipeForm = () => {
 };
 
 export default RecipeForm;
-
-// https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA
