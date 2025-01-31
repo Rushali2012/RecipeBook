@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams} from 'react-router-dom';
 import { useRecipes } from '../context/RecipeContext';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -126,8 +126,9 @@ const RecipeForm = () => {
             noValidate
           >
             <div className="p-4">
+            {/* <Link to={'/dashboard'}><button class="text-red-600 px-[13.5cm] font-bold py-2">❌</button></Link> */}
               <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 mt-3 rounded-lg shadow-md text-2xl text-center">
-                <FontAwesomeIcon icon={faBowlFood} /> {id ? 'Update Recipe' : 'Add Recipe'}
+                <FontAwesomeIcon icon={faBowlFood} /> {id ? 'Update Recipe' : 'Add Recipe'} 
               </h3>
             </div>
 
