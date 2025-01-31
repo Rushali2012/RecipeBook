@@ -17,12 +17,19 @@ const RecipeDetail = () => {
   }
 
   const instructions = recipe.strInstructions ? recipe.strInstructions.split('\n') : [];
-  const ingredients = recipe.strIngredient ? recipe.strIngredient.split('\n') : [];
+  
+  const ingredients = [];
+  const measures = [];
 
   for (let i = 1; i <= 20; i++) {
     const ingredient = recipe[`strIngredient${i}`];
-    if (ingredient) {
+    const measure = recipe[`strMeasure${i}`];
+
+    if (ingredient && ingredient.trim() !== "") {
       ingredients.push(ingredient);
+    }
+    if (measure && measure.trim() !== "") {
+      measures.push(measure);
     }
   }
 
@@ -75,12 +82,9 @@ const RecipeDetail = () => {
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">Ingredients</h2>
                 <ul className="space-y-3">
                   {ingredients.map((ingredient, index) => (
-                    <li 
-                      key={index} 
-                      className="text-gray-700 text-lg flex items-center"
-                    >
+                    <li key={index} className="text-gray-700 text-lg flex items-center">
                       <span className="w-2 h-2 bg-blue-800 rounded-full mr-3"></span>
-                      {ingredient}
+                      {ingredient} - {measures[index] }
                     </li>
                   ))}
                 </ul>

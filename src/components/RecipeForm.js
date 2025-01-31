@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams} from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useRecipes } from '../context/RecipeContext';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -13,6 +13,7 @@ const validationSchema = Yup.object({
   strCategory: Yup.string().required('Category is required'),
   strMealThumb: Yup.string().url('Invalid image URL').required('Image URL is required'),
   ingredients: Yup.array().of(Yup.string().required('Ingredient is required')).min(1, 'At least one ingredient is required'),
+  measures: Yup.array().of(Yup.string().required('Measure is required')).min(1, 'At least one measure is required'),
   steps: Yup.array().of(Yup.string().required('Step is required')).min(1, 'At least one step is required')
 });
 
@@ -29,35 +30,32 @@ const RecipeForm = () => {
     strMealThumb: '',
     strInstructions: '',
     ingredients: [''],
+    measures: [''],
     steps: ['']
   });
 
   useEffect(() => {
-    if (id) {
-      const existingRecipe = recipes.find(r => r.idMeal === id);
-      if (existingRecipe) {
-        let ingredients = [];
-        
-        if (Array.isArray(existingRecipe.ingredients)) {
-          ingredients = [...new Set(existingRecipe.ingredients)];
-        } else if (existingRecipe.strIngredient) {
-          ingredients = [...new Set(existingRecipe.strIngredient.split('\n').filter(ing => ing.trim()))];
-        } else {
-          for (let i = 1; i <= 20; i++) {
-            const ingredient = existingRecipe[`strIngredient${i}`];
-            if (ingredient && ingredient.trim()) {
-              ingredients.push(ingredient.trim());
+    const fetchRecipeDetails = async () => {
+      if (id) {
+        const existingRecipe = recipes.find(r => r.idMeal === id);
+        if (existingRecipe) {
+          const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
+          const data = await response.json();
+          
+          if (data.meals && data.meals[0]) {
+            const meal = data.meals[0];
+
+            let ingredients = [];
+            let measures = [];
+            for (let i = 1; i <= 20; i++) {
+              const ingredient = meal[`strIngredient${i}`];
+              const measure = meal[`strMeasure${i}`];
+              if (ingredient && ingredient.trim()) {
+                ingredients.push(ingredient?ingredient.trim():'');
+                measures.push(measure ? measure.trim() : '');
+              }
             }
-          }
-        }
-
-        ingredients = [...new Set(ingredients.filter(ing => ing))];
-        
-        if (ingredients.length === 0) {
-          ingredients = [''];
-        }
-
-        const cleanedInstructions = existingRecipe.strInstructions
+            const cleanedInstructions = existingRecipe.strInstructions
           ? existingRecipe.strInstructions
               .replace(/[\r\n]+/g, '\n')
               .split('\n')
@@ -65,31 +63,39 @@ const RecipeForm = () => {
               .filter(step => step !== '')
           : [''];
 
-        setFormData({
-          idMeal: existingRecipe.idMeal,
-          strMeal: existingRecipe.strMeal,
-          strCategory: existingRecipe.strCategory,
-          strMealThumb: existingRecipe.strMealThumb,
-          strInstructions: existingRecipe.strInstructions || '',
-          ingredients: ingredients,
-          steps: cleanedInstructions.length ? cleanedInstructions : ['']
-        });
+            setFormData({
+              idMeal: meal.idMeal,
+              strMeal: meal.strMeal,
+              strCategory: meal.strCategory,
+              strMealThumb: meal.strMealThumb,
+              strInstructions: meal.strInstructions || '',
+              ingredients: ingredients.length > 0 ? ingredients : [''],
+              measures: measures.length > 0 ? measures : [''],
+              steps: cleanedInstructions.length ? cleanedInstructions : ['']
+            });
+          }
+        }
       }
-    }
+    };
+
+    fetchRecipeDetails();
   }, [id, recipes]);
 
   const handleSubmit = (values) => {
     const cleanedIngredients = [...new Set(values.ingredients.filter(ing => ing.trim()))];
-    
+    const cleanedMeasures = [...new Set(values.measures.filter(mea => mea.trim()))];
+
     const recipeData = {
       ...values,
       ingredients: cleanedIngredients,
+      measures: cleanedMeasures,
       strIngredient: cleanedIngredients.join('\n'),
+      strMeasure: cleanedMeasures.join('\n'),
       strInstructions: values.steps.join('\n'),
       ...cleanedIngredients.reduce((acc, ing, idx) => {
         acc[`strIngredient${idx + 1}`] = ing;
         return acc;
-      }, {})
+      }, {}),
     };
 
     if (id) {
@@ -105,7 +111,6 @@ const RecipeForm = () => {
   }
 
   return (
-    // <div className="w-full min-h-[25cm] mx-auto px-4 py-8 bg-cover bg-no-repeat mt-20 bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]">
     <div className="flex flex-col min-h-screen bg-cover bg-no-repeat bg-[url('https://imgs.search.brave.com/bk-icC1zeDLSDZqJ0QZTbEuDCGllvQQpGuwrGWI2bjM/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9pbWcu/ZnJlZXBpay5jb20v/ZnJlZS1waG90by93/aGl0ZS1wbGF0ZS1t/YWNhcm9uaS1jYWJi/YWdlLXdoaXRlLXBs/YXRlLWhpZ2gtcXVh/bGl0eS1waG90b18x/MTQ1NzktMzU2OTYu/anBnP3NlbXQ9YWlz/X2h5YnJpZA')]">
       <Formik
         enableReinitialize={true}
@@ -126,7 +131,6 @@ const RecipeForm = () => {
             noValidate
           >
             <div className="p-4">
-            {/* <Link to={'/dashboard'}><button class="text-red-600 px-[13.5cm] font-bold py-2">❌</button></Link> */}
               <h3 className="max-w-lg mx-auto bg-[#3b6583] text-white p-2 mt-3 rounded-lg shadow-md text-2xl text-center">
                 <FontAwesomeIcon icon={faBowlFood} /> {id ? 'Update Recipe' : 'Add Recipe'} 
               </h3>
@@ -196,7 +200,12 @@ const RecipeForm = () => {
                             <Field
                               name={`ingredients[${index}]`}
                               placeholder="Ingredients..."
-                              className={`w-full hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.ingredients?.[index] && errors.ingredients?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                              className={` hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.ingredients?.[index] && errors.ingredients?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                            />
+                            <Field
+                              name={`measures[${index}]`}
+                              placeholder="Measure..."
+                              className={` hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.measures?.[index] && errors.measures?.[index] ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {index > 0 && (
                               <button
@@ -208,14 +217,14 @@ const RecipeForm = () => {
                               </button>
                             )}
                           </div>
-                          {touched.ingredients?.[index] && errors.ingredients?.[index] && (
-                            <div className="text-red-500 font-bold text-sm mt-1">{errors.ingredients[index]}</div>
-                          )}
                         </div>
                       ))}
                       <button
                         type="button"
-                        onClick={() => push('')}
+                        onClick={() => {
+                          push('');
+                          
+                        }}
                         className="mt-2 bg-blue-700 text-white py-1 px-3 rounded h-8 w-30"
                       >
                         +
@@ -248,9 +257,6 @@ const RecipeForm = () => {
                               </button>
                             )}
                           </div>
-                          {touched.steps?.[index] && errors.steps?.[index] && (
-                            <div className="text-red-500 font-bold text-sm mt-1">{errors.steps[index]}</div>
-                          )}
                         </div>
                       ))}
                       <button
