@@ -178,7 +178,7 @@ const RecipeForm = () => {
                 )}
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 ">
                 <label className="flex text-black gap-1 mb-2">Ingredients <h6 className="text-red-600">*</h6></label>
                 <FieldArray name="ingredients">
                   {({ push, remove }) => (
@@ -189,12 +189,12 @@ const RecipeForm = () => {
                             <Field
                               name={`ingredients[${index}]`}
                               placeholder="Ingredients..."
-                              className={` hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.ingredients?.[index] && errors.ingredients?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                              className={`hover:bg-blue-50 w-[50%] hover:placeholder-black px-3 py-2 border rounded ${touched.ingredients?.[index] && errors.ingredients?.[index] ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             <Field
                               name={`measures[${index}]`}
                               placeholder="Measure..."
-                              className={` hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.measures?.[index] && errors.measures?.[index] ? 'border-red-500' : 'border-gray-300'}`}
+                              className={`w-[50%] hover:bg-blue-50 hover:placeholder-black px-3 py-2 border rounded ${touched.measures?.[index] && errors.measures?.[index] ? 'border-red-500' : 'border-gray-300'}`}
                             />
                             {index > 0 && (
                               <button
