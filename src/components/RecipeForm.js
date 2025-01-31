@@ -207,7 +207,11 @@ const RecipeForm = () => {
                             )}
                           </div>
                         </div>
+                        
                       ))}
+                      {touched.ingredients && errors.ingredients && (
+                  <div className="text-red-500 font-bold text-sm">{errors.ingredients}</div>
+                )}
                       <button
                         type="button"
                         onClick={() => {
@@ -248,6 +252,9 @@ const RecipeForm = () => {
                           </div>
                         </div>
                       ))}
+                      {touched.steps && errors.steps && (
+                  <div className="text-red-500 font-bold text-sm">{errors.steps}</div>
+                )}
                       <button
                         type="button"
                         onClick={() => push('')}
@@ -287,4 +294,3 @@ const RecipeForm = () => {
 };
 
 export default RecipeForm;
-

@@ -12,8 +12,8 @@ ingredients, steps and category of that recipe.
 ![alt text](images/image-4.png)
 ![alt text](images/image-5.png)
 # Edit Recipe
-![alt text](images/image-6.png)
+![alt text](images/img.png)
 # Add Recipe
-![alt text](images/image-7.png)
-![alt text](images/image-8.png)
+![alt text](images/img1.png)
+![alt text](images/img2.png)
 ![alt text](images/image-9.png)

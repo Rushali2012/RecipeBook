@@ -5,5 +5,3 @@ module.exports = {
     'postcss-flexbugs-fixes': {},
   },
 };
-
-
