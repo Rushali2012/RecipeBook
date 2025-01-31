@@ -18,20 +18,19 @@ const RecipeDetail = () => {
 
   const instructions = recipe.strInstructions ? recipe.strInstructions.split('\n') : [];
   
+  
   const ingredients = [];
-  const measures = [];
+const measures = [];
 
-  for (let i = 1; i <= 20; i++) {
-    const ingredient = recipe[`strIngredient${i}`];
-    const measure = recipe[`strMeasure${i}`];
+for (let i = 1; i <= 20; i++) {
+  const ingredient = recipe[`strIngredient${i}`];
+  const measure = recipe[`strMeasure${i}`];
 
-    if (ingredient && ingredient.trim() !== "") {
-      ingredients.push(ingredient);
-    }
-    if (measure && measure.trim() !== "") {
-      measures.push(measure);
-    }
+  if (ingredient && ingredient.trim() !== "") {
+    ingredients.push(ingredient);
+    measures.push(measure ? measure.trim() : '');
   }
+}
 
   const handleBackClick = () => {
     if (source === 'host') {
@@ -81,12 +80,14 @@ const RecipeDetail = () => {
               <div className="w-full md:w-1/3">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">Ingredients</h2>
                 <ul className="space-y-3">
-                  {ingredients.map((ingredient, index) => (
-                    <li key={index} className="text-gray-700 text-lg flex items-center">
-                      <span className="w-2 h-2 bg-blue-800 rounded-full mr-3"></span>
-                      {ingredient} - {measures[index] }
-                    </li>
-                  ))}
+                 
+
+{ingredients.map((ingredient, index) => (
+  <li key={index} className="text-gray-700 text-lg flex items-center">
+    <span className="w-2 h-2 bg-blue-800 rounded-full mr-3"></span>
+    {ingredient} - {measures[index]}
+  </li>
+))}
                 </ul>
               </div>
 

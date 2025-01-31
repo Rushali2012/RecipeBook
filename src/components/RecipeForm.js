@@ -34,70 +34,59 @@ const RecipeForm = () => {
     steps: ['']
   });
 
+
+
   useEffect(() => {
-    const fetchRecipeDetails = async () => {
-      if (id) {
-        const existingRecipe = recipes.find(r => r.idMeal === id);
-        if (existingRecipe) {
-          const response = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`);
-          const data = await response.json();
-          
-          if (data.meals && data.meals[0]) {
-            const meal = data.meals[0];
-
-            let ingredients = [];
-            let measures = [];
-            for (let i = 1; i <= 20; i++) {
-              const ingredient = meal[`strIngredient${i}`];
-              const measure = meal[`strMeasure${i}`];
-              if (ingredient && ingredient.trim()) {
-                ingredients.push(ingredient?ingredient.trim():'');
-                measures.push(measure ? measure.trim() : '');
-              }
-            }
-            const cleanedInstructions = existingRecipe.strInstructions
-          ? existingRecipe.strInstructions
-              .replace(/[\r\n]+/g, '\n')
-              .split('\n')
-              .map(step => step.trim())
-              .filter(step => step !== '')
-          : [''];
-
-            setFormData({
-              idMeal: meal.idMeal,
-              strMeal: meal.strMeal,
-              strCategory: meal.strCategory,
-              strMealThumb: meal.strMealThumb,
-              strInstructions: meal.strInstructions || '',
-              ingredients: ingredients.length > 0 ? ingredients : [''],
-              measures: measures.length > 0 ? measures : [''],
-              steps: cleanedInstructions.length ? cleanedInstructions : ['']
-            });
+    if (id) {
+      const existingRecipe = recipes.find(r => r.idMeal === id);
+      if (existingRecipe) {
+        const ingredients = [];
+        const measures = [];
+        for (let i = 1; i <= 20; i++) {
+          const ingredient = existingRecipe[`strIngredient${i}`];
+          const measure = existingRecipe[`strMeasure${i}`];
+          if (ingredient && ingredient.trim()) {
+            ingredients.push(ingredient.trim());
+            measures.push(measure ? measure.trim() : '');
           }
         }
+        const cleanedInstructions = existingRecipe.strInstructions
+          ? existingRecipe.strInstructions.split('\n').map(step => step.trim()).filter(step => step !== '')
+          : [''];
+  
+        setFormData({
+          idMeal: existingRecipe.idMeal,
+          strMeal: existingRecipe.strMeal,
+          strCategory: existingRecipe.strCategory,
+          strMealThumb: existingRecipe.strMealThumb,
+          strInstructions: existingRecipe.strInstructions || '',
+          ingredients: ingredients.length > 0 ? ingredients : [''],
+          measures: measures.length > 0 ? measures : [''],
+          steps: cleanedInstructions.length ? cleanedInstructions : ['']
+        });
       }
-    };
-
-    fetchRecipeDetails();
+    }
   }, [id, recipes]);
 
   const handleSubmit = (values) => {
     const cleanedIngredients = [...new Set(values.ingredients.filter(ing => ing.trim()))];
-    const cleanedMeasures = [...new Set(values.measures.filter(mea => mea.trim()))];
-
+    const cleanedMeasures = [...values.measures.filter(mea => mea.trim())];
+  
     const recipeData = {
       ...values,
       ingredients: cleanedIngredients,
       measures: cleanedMeasures,
-      strIngredient: cleanedIngredients.join('\n'),
-      strMeasure: cleanedMeasures.join('\n'),
       strInstructions: values.steps.join('\n'),
       ...cleanedIngredients.reduce((acc, ing, idx) => {
         acc[`strIngredient${idx + 1}`] = ing;
         return acc;
       }, {}),
+      ...cleanedMeasures.reduce((acc, mea, idx) => {
+        acc[`strMeasure${idx + 1}`] = mea;
+        return acc;
+      }, {}),
     };
-
+  
     if (id) {
       updateRecipe(recipeData);
     } else {
@@ -298,5 +287,4 @@ const RecipeForm = () => {
 };
 
 export default RecipeForm;
-
 
