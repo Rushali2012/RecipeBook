@@ -35,14 +35,14 @@ const HostDashboard = () => {
     setShowModal(false);
     setRecipeToDelete(null);
   };
+  
 
   return (
     <div className="container mx-auto px-4 py-8 mt-20">
       <div className="flex justify-between items-center mb-8 mt-5">
         <div><Link to={'/login'}><button className="text-xl font-semibold text-gray-700">&lt;&lt; Back</button></Link></div>
-        
         <h1 className="text-3xl font-bold">
-          Welcome, {user?.username ?? 'Host'}
+        Welcome, {user?.email.split('@')[0].charAt(0).toUpperCase() + user?.email.split('@')[0].slice(1).toLowerCase() ?? 'Host'}
         </h1>
         <Link 
           to="/recipe/new" 
