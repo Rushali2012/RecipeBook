@@ -36,7 +36,7 @@ const GuestRecipePage = () => {
         </div>
       ) : (
         <div className="text-center text-gray-600">
-          No recipes found matching your search.
+          
         </div>
       )}
     </div>

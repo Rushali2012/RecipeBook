@@ -83,7 +83,6 @@ const HostDashboard = () => {
         </div>
       ) : (
         <div className="text-center text-black-600 mt-[4rem]">
-          No recipes found matching your search.
         </div>
       )}
 
